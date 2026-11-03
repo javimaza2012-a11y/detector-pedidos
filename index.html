@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detector de Pedidos en Recepción - KLYS</title>
+  <!-- SheetJS para leer y exportar archivos Excel (.xlsx / .xls / .csv) directamente en el navegador -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
+          onerror="var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';document.head.appendChild(s);"></script>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #ea580c;
+      --primary-hover: #c2410c;
+      --primary-light: #fff7ed;
+      --accent: #0284c7;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --warning: #d97706;
+      --warning-bg: #fffbeb;
+      --success: #16a34a;
+      --success-bg: #f0fdf4;
+      --radius: 10px;
+      --shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1480px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Cabecera */
+    .header {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 22px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-left: 5px solid var(--primary);
+    }
+
+    .header-title h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-title p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .file-status {
+      font-size: 0.82rem;
+      color: var(--muted);
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    /* Zona de carga (Drag & Drop) */
+    .dropzone {
+      background: var(--card);
+      border: 2px dashed #cbd5e1;
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .dropzone.compact {
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .dropzone-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .dropzone-sub {
+      font-size: 0.83rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Panel de Reglas de Detección */
+    .rules-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .rules-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .rules-header h2 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #334155;
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .field-group label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    select, input[type="date"], input[type="text"] {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.86rem;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+    }
+
+    select:focus, input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.15);
+    }
+
+    /* Botones */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-outline {
+      background: #fff;
+      border-color: #cbd5e1;
+      color: #334155;
+    }
+    .btn-outline:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+    }
+    .btn-success:hover {
+      background: #15803d;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Tarjetas KPI */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-card.highlight {
+      border-color: #fdba74;
+      background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
+    }
+
+    .kpi-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .kpi-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-top: 4px;
+      color: var(--text);
+    }
+
+    .kpi-card.highlight .kpi-value {
+      color: var(--primary);
+    }
+
+    .kpi-sub {
+      font-size: 0.76rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Barra de herramientas de tabla */
+    .table-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .table-toolbar {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: #f8fafc;
+    }
+
+    .toolbar-left, .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Tabla */
+    .table-wrapper {
+      overflow-x: auto;
+      max-height: 68vh;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: left;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+      padding: 10px 10px;
+      border-bottom: 2px solid #cbd5e1;
+      white-space: nowrap;
+      z-index: 2;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    thead th:hover {
+      background: #e2e8f0;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    tbody tr.row-matched {
+      background: #fffbeb;
+    }
+    tbody tr.row-matched:hover {
+      background: #fef3c7;
+    }
+
+    td {
+      padding: 8px 10px;
+      white-space: nowrap;
+      color: #1e293b;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .badge-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .badge-warning {
+      background: #ffedd5;
+      color: #c2410c;
+    }
+
+    .badge-info {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .badge-success {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .badge-neutral {
+      background: #f1f5f9;
+      color: #64748b;
+    }
+
+    .date-late {
+      color: #b91c1c;
+      font-weight: 700;
+      background: #fef2f2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #fecaca;
+    }
+
+    .date-early {
+      color: #0369a1;
+      font-weight: 600;
+      background: #f0f9ff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #bae6fd;
+    }
+
+    .empty-state {
+      padding: 48px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #0f172a;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 999;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Cabecera -->
+    <header class="header">
+      <div class="header-title">
+        <h1>📦 Detector de Pedidos en Recepción</h1>
+        <p>Filtra automáticamente el archivo descargado de recepción (hoja <strong>Export</strong>) según las fechas de entrega, solicitada y planificada.</p>
+      </div>
+      <div class="header-actions">
+        <span id="fileStatus" class="file-status">Ningún archivo cargado todavía</span>
+        <button type="button" class="btn btn-outline" id="btnSampleData" title="Carga filas de ejemplo como las de tu captura para probar la herramienta">
+          🧪 Cargar datos de ejemplo
+        </button>
+      </div>
+    </header>
+
+    <!-- Zona para arrastrar el Excel -->
+    <div class="dropzone" id="dropzone">
+      <div>
+        <div class="dropzone-title">📂 Arrastra aquí tu Excel (<em>pedidos recepción almacen.xlsx / .xls</em>) o haz clic para seleccionarlo</div>
+        <div class="dropzone-sub">Cuando actualices el Excel 2 veces al día, solo tienes que volver a soltarlo aquí. Todo se procesa en tu ordenador al instante.</div>
+      </div>
+      <div>
+        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none;" />
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('fileInput').click(); event.stopPropagation();">
+          Seleccionar archivo Excel
+        </button>
+      </div>
+    </div>
+
+    <!-- Panel de Condiciones de Filtrado -->
+    <section class="rules-panel">
+      <div class="rules-header">
+        <h2>⚙️ Condición de Detección (Preconfigurada al 13 de Noviembre)</h2>
+        <button type="button" class="btn btn-outline" id="btnResetRules" style="padding: 5px 10px; font-size: 0.78rem;">
+          Restaurar regla del 13/11
+        </button>
+      </div>
+
+      <div class="rules-grid">
+        <!-- Fecha de referencia -->
+        <div class="field-group">
+          <label for="cutoffDate">📅 Fecha de Corte (Referencia)</label>
+          <input type="date" id="cutoffDate" value="2026-11-13" />
+        </div>
+
+        <!-- Previsto Entrega (Col I) -->
+        <div class="field-group">
+          <label for="opPrevisto">Col I · Previsto Entrega</label>
+          <select id="opPrevisto">
+            <option value="gt" selected>Posterior a la fecha (&gt; 13/11)</option>
+            <option value="gte">Posterior o igual (&ge; 13/11)</option>
+            <option value="lt">Anterior a la fecha (&lt; 13/11)</option>
+            <option value="lte">Anterior o igual (&le; 13/11)</option>
+            <option value="any">Cualquiera (No filtrar)</option>
+          </select>
+        </div>
+
+        <!-- Fecha Solicitada (Col K) -->
+        <div class="field-group">
+          <label for="opSolicitada">Col K · Fecha Solicitada</label>
+          <select id="opSolicitada">
+            <option value="lt" selected>Anterior a la fecha (&lt; 13/11)</option>
+            <option value="lte">Anterior o igual (&le; 13/11)</option>
+            <option value="lt_or_empty">Anterior (&lt; 13/11) o vacía</option>
+            <option value="gt">Posterior a la fecha (&gt; 13/11)</option>
+            <option value="gte">Posterior o igual (&ge; 13/11)</option>
+            <option value="any">Cualquiera (No filtrar)</option>
+          </select>
+        </div>
+
+        <!-- Fecha Planificada (Col L) -->
+        <div class="field-group">
+          <label for="opPlanificada">Col L · Fecha Planificada</label>
+          <select id="opPlanificada">
+            <option value="lt" selected>Anterior a la fecha (&lt; 13/11)</option>
+            <option value="lte">Anterior o igual (&le; 13/11)</option>
+            <option value="lt_or_empty">Anterior (&lt; 13/11) o vacía</option>
+            <option value="gt">Posterior a la fecha (&gt; 13/11)</option>
+            <option value="gte">Posterior o igual (&ge; 13/11)</option>
+            <option value="any">Cualquiera (No filtrar)</option>
+          </select>
+        </div>
+
+        <!-- 1ª Recepción (Col Q) -->
+        <div class="field-group">
+          <label for="filterRecepcion">Col Q · Estado 1ª Recepción</label>
+          <select id="filterRecepcion">
+            <option value="all" selected>Todos (Recepcionados y pendientes)</option>
+            <option value="pending">Solo pendientes (Sin 1ª Recepción)</option>
+            <option value="received">Solo ya recepcionados</option>
+          </select>
+        </div>
+
+        <!-- Sección / Urgente / Ruptura -->
+        <div class="field-group">
+          <label for="filterSec">Col B · Sección (Sec)</label>
+          <select id="filterSec">
+            <option value="all">Todas las secciones</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tarjetas Resumen (KPIs) -->
+    <section class="kpi-grid">
+      <div class="kpi-card highlight">
+        <div class="kpi-label">🚨 Pedidos Detectados</div>
+        <div class="kpi-value" id="kpiDetected">0</div>
+        <div class="kpi-sub" id="kpiDetectedRule">Previsto &gt; 13/11 y Solic./Planif. &lt; 13/11</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">📋 Total Pedidos en Excel</div>
+        <div class="kpi-value" id="kpiTotal">0</div>
+        <div class="kpi-sub" id="kpiSheetName">Hoja: -</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">⚠️ Detectados con Ruptura / Urgente</div>
+        <div class="kpi-value" id="kpiCritical">0</div>
+        <div class="kpi-sub" id="kpiCriticalSub">Ruptura = S o Urgente = S</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">⏳ Detectados Pendientes Recepción</div>
+        <div class="kpi-value" id="kpiPending">0</div>
+        <div class="kpi-sub">Sin fecha en 1ª Recepción</div>
+      </div>
+    </section>
+
+    <!-- Tabla de Resultados -->
+    <section class="table-card">
+      <div class="table-toolbar">
+        <div class="toolbar-left">
+          <select id="viewMode" style="width: auto; font-weight: 600;">
+            <option value="matched" selected>🎯 Mostrar SOLO pedidos detectados</option>
+            <option value="all">📄 Mostrar TODOS los pedidos del Excel</option>
+          </select>
+          <input type="text" id="searchInput" placeholder="🔍 Buscar Nº Pedido, Proveedor, Agencia..." style="width: 280px;" />
+        </div>
+        <div class="toolbar-right">
+          <button type="button" class="btn btn-outline" id="btnCopyOrders" disabled>
+            📋 Copiar Nº Pedidos
+          </button>
+          <button type="button" class="btn btn-success" id="btnExportExcel" disabled>
+            📥 Descargar Excel Filtrado (.xlsx)
+          </button>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table id="ordersTable">
+          <thead>
+            <tr>
+              <th data-sort="sec">Sec</th>
+              <th data-sort="tipo">T</th>
+              <th data-sort="pedido">Nº Pedido</th>
+              <th data-sort="urgente">Urg</th>
+              <th data-sort="ruptura">Rup</th>
+              <th data-sort="proveedor">Proveedor</th>
+              <th data-sort="ejecucion">Ejecución Pedido</th>
+              <th data-sort="previsto">Previsto Entrega (I)</th>
+              <th data-sort="solicitudCita">Solicitud Cita</th>
+              <th data-sort="solicitada">Fecha Solicitada (K)</th>
+              <th data-sort="planificada">Fecha Planificada (L)</th>
+              <th data-sort="expedicion">Nº Expedición</th>
+              <th data-sort="agencia">Agencia</th>
+              <th data-sort="paq">Paq</th>
+              <th data-sort="pal">Pal</th>
+              <th data-sort="recepcion">1ª Recepción</th>
+              <th data-sort="valoracion">Fecha Valoración</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td colspan="17" class="empty-state">
+                Arrastra tu archivo Excel arriba o pulsa en <strong>"🧪 Cargar datos de ejemplo"</strong> para ver cómo funciona.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // Estado global
+    let allRows = [];
+    let filteredRows = [];
+    let currentSort = { key: null, asc: true };
+    let currentFileName = "pedidos_recepcion";
+
+    // Utilidad para mostrar avisos rápidos
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2800);
+    }
+
+    // Normalizar texto de cabecera para encontrar columnas sin importar tildes o mayúsculas
+    function normHeader(str) {
+      return String(str || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ");
+    }
+
+    // Parsear cualquier fecha del Excel (DD/MM/YYYY, número serie Excel, YYYY-MM-DD o Date)
+    // Devuelve un entero YYYYMMDD para comparaciones exactas sin problemas de zona horaria
+    function parseExcelDate(val) {
+      if (val === null || val === undefined || val === "") return null;
+
+      if (val instanceof Date && !isNaN(val.getTime())) {
+        const y = val.getFullYear();
+        const m = val.getMonth() + 1;
+        const d = val.getDate();
+        return {
+          int: y * 10000 + m * 100 + d,
+          display: `${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}/${y}`
+        };
+      }
+
+      // Si es número de serie de Excel (ej. 46339 -> Nov 2026)
+      if (typeof val === "number" && val > 25000 && val < 80000) {
+        const utcDays = Math.floor(val - 25569);
+        const utcValue = utcDays * 86400 * 1000;
+        const dateInfo = new Date(utcValue);
+        const y = dateInfo.getUTCFullYear();
+        const m = dateInfo.getUTCMonth() + 1;
+        const d = dateInfo.getUTCDate();
+        return {
+          int: y * 10000 + m * 100 + d,
+          display: `${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}/${y}`
+        };
+      }
+
+      const str = String(val).trim();
+      if (!str) return null;
+
+      // Formato DD/MM/YYYY o DD-MM-YYYY (con o sin hora detrás)
+      const dmy = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
+      if (dmy) {
+        const d = parseInt(dmy[1], 10);
+        const m = parseInt(dmy[2], 10);
+        let y = parseInt(dmy[3], 10);
+        if (y < 100) y += 2000;
+        return {
+          int: y * 10000 + m * 100 + d,
+          display: `${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}/${y}`
+        };
+      }
+
+      // Formato YYYY-MM-DD
+      const ymd = str.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+      if (ymd) {
+        const y = parseInt(ymd[1], 10);
+        const m = parseInt(ymd[2], 10);
+        const d = parseInt(ymd[3], 10);
+        return {
+          int: y * 10000 + m * 100 + d,
+          display: `${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}/${y}`
+        };
+      }
+
+      return null;
+    }
+
+    // Convertir el input type="date" (YYYY-MM-DD) a entero YYYYMMDD
+    function getCutoffInt() {
+      const val = document.getElementById("cutoffDate").value || "2026-11-13";
+      const parts = val.split("-");
+      if (parts.length !== 3) return 20261113;
+      return parseInt(parts[0], 10) * 10000 + parseInt(parts[1], 10) * 100 + parseInt(parts[2], 10);
+    }
+
+    function formatCutoffDisplay() {
+      const val = document.getElementById("cutoffDate").value || "2026-11-13";
+      const [y, m, d] = val.split("-");
+      return `${d}/${m}/${y}`;
+    }
+
+    // Evaluar un operador sobre una fecha
+    function checkDateRule(dateObj, op, cutoffInt) {
+      if (op === "any") return true;
+      if (!dateObj) {
+        return op === "lt_or_empty";
+      }
+      const v = dateObj.int;
+      switch (op) {
+        case "gt": return v > cutoffInt;
+        case "gte": return v >= cutoffInt;
+        case "lt": return v < cutoffInt;
+        case "lte": return v <= cutoffInt;
+        case "lt_or_empty": return v < cutoffInt;
+        default: return true;
+      }
+    }
+
+    // Mapear una matriz de filas del Excel a nuestros objetos estructurados
+    function parseSheetMatrix(matrix, sheetName) {
+      if (!matrix || matrix.length === 0) return [];
+
+      // Buscar la fila de cabecera (donde aparece "Nº Pedido" o "Previsto Entrega")
+      let headerRowIndex = 0;
+      for (let i = 0; i < Math.min(10, matrix.length); i++) {
+        const rowNorm = (matrix[i] || []).map(normHeader).join("|");
+        if (rowNorm.includes("pedido") && (rowNorm.includes("previsto") || rowNorm.includes("solicitada"))) {
+          headerRowIndex = i;
+          break;
+        }
+      }
+
+      const headers = (matrix[headerRowIndex] || []).map(normHeader);
+
+      // Función para localizar el índice de cada columna por nombre o usar el índice por defecto de la captura (A..R)
+      function findCol(keywords, fallbackIndex) {
+        for (let idx = 0; idx < headers.length; idx++) {
+          const h = headers[idx];
+          if (keywords.some(k => h === k || h.includes(k))) {
+            return idx;
+          }
+        }
+        return fallbackIndex;
+      }
+
+      const idxAlmacen      = findCol(["codigo almacen", "almacen"], 0);
+      const idxSec          = findCol(["sec"], 1);
+      const idxTipo         = findCol(["t", "tipo"], 2);
+      const idxPedido       = findCol(["nº pedido", "no pedido", "num pedido", "numero pedido"], 3);
+      const idxUrgente      = findCol(["urgente"], 4);
+      const idxRuptura      = findCol(["ruptura"], 5);
+      const idxProveedor    = findCol(["proveedor"], 6);
+      const idxEjecucion    = findCol(["ejecucion pedido", "ejecucion"], 7);
+      const idxPrevisto     = findCol(["previsto entrega", "previsto"], 8);
+      const idxSolicitudCita= findCol(["solicitud de cita", "solicitud cita"], 9);
+      const idxSolicitada   = findCol(["fecha solicitada", "solicitada"], 10);
+      const idxPlanificada  = findCol(["fecha planificada", "planificada"], 11);
+      const idxExpedicion   = findCol(["nº expedicion", "expedicion"], 12);
+      const idxAgencia      = findCol(["agencia"], 13);
+      const idxPaq          = findCol(["paq"], 14);
+      const idxPal          = findCol(["pal"], 15);
+      const idxRecepcion    = findCol(["1ª recepcion", "1a recepcion", "recepcion"], 16);
+      const idxValoracion   = findCol(["fecha valoracion", "valoracion"], 17);
+
+      const parsed = [];
+      for (let r = headerRowIndex + 1; r < matrix.length; r++) {
+        const row = matrix[r];
+        if (!row || row.length === 0) continue;
+
+        const pedidoVal = row[idxPedido] !== undefined ? String(row[idxPedido]).trim() : "";
+        const proveedorVal = row[idxProveedor] !== undefined ? String(row[idxProveedor]).trim() : "";
+        if (!pedidoVal && !proveedorVal) continue;
+
+        const ejecucionObj   = parseExcelDate(row[idxEjecucion]);
+        const previstoObj    = parseExcelDate(row[idxPrevisto]);
+        const solCitaObj     = parseExcelDate(row[idxSolicitudCita]);
+        const solicitadaObj  = parseExcelDate(row[idxSolicitada]);
+        const planificadaObj = parseExcelDate(row[idxPlanificada]);
+        const recepcionObj   = parseExcelDate(row[idxRecepcion]);
+        const valoracionObj  = parseExcelDate(row[idxValoracion]);
+
+        parsed.push({
+          almacen: row[idxAlmacen] ?? "",
+          sec: row[idxSec] !== undefined ? String(row[idxSec]).trim() : "",
+          tipo: row[idxTipo] !== undefined ? String(row[idxTipo]).trim() : "",
+          pedido: pedidoVal,
+          urgente: row[idxUrgente] !== undefined ? String(row[idxUrgente]).trim().toUpperCase() : "",
+          ruptura: row[idxRuptura] !== undefined ? String(row[idxRuptura]).trim().toUpperCase() : "",
+          proveedor: proveedorVal,
+          ejecucion: ejecucionObj ? ejecucionObj.display : (row[idxEjecucion] ?? ""),
+          ejecucionInt: ejecucionObj ? ejecucionObj.int : 0,
+          previsto: previstoObj ? previstoObj.display : (row[idxPrevisto] ?? ""),
+          previstoObj,
+          previstoInt: previstoObj ? previstoObj.int : 0,
+          solicitudCita: solCitaObj ? solCitaObj.display : (row[idxSolicitudCita] ?? ""),
+          solicitudCitaInt: solCitaObj ? solCitaObj.int : 0,
+          solicitada: solicitadaObj ? solicitadaObj.display : (row[idxSolicitada] ?? ""),
+          solicitadaObj,
+          solicitadaInt: solicitadaObj ? solicitadaObj.int : 0,
+          planificada: planificadaObj ? planificadaObj.display : (row[idxPlanificada] ?? ""),
+          planificadaObj,
+          planificadaInt: planificadaObj ? planificadaObj.int : 0,
+          expedicion: row[idxExpedicion] !== undefined ? String(row[idxExpedicion]).trim() : "",
+          agencia: row[idxAgencia] !== undefined ? String(row[idxAgencia]).trim() : "",
+          paq: row[idxPaq] ?? "",
+          pal: row[idxPal] ?? "",
+          recepcion: recepcionObj ? recepcionObj.display : (row[idxRecepcion] !== undefined ? String(row[idxRecepcion]).trim() : ""),
+          valoracion: valoracionObj ? valoracionObj.display : (row[idxValoracion] !== undefined ? String(row[idxValoracion]).trim() : "")
+        });
+      }
+
+      document.getElementById("kpiSheetName").textContent = `Hoja: ${sheetName || "Export"}`;
+      populateSecDropdown(parsed);
+      return parsed;
+    }
+
+    function populateSecDropdown(rows) {
+      const sel = document.getElementById("filterSec");
+      const currentVal = sel.value;
+      const secs = Array.from(new Set(rows.map(r => r.sec).filter(Boolean))).sort((a, b) => Number(a) - Number(b));
+      sel.innerHTML = `<option value="all">Todas las secciones</option>`;
+      secs.forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s;
+        opt.textContent = `Sección ${s}`;
+        sel.appendChild(opt);
+      });
+      if (secs.includes(currentVal)) sel.value = currentVal;
+    }
+
+    // Aplicar las reglas y actualizar tabla y KPIs
+    function applyFiltersAndRender() {
+      const cutoffInt = getCutoffInt();
+      const cutoffStr = formatCutoffDisplay();
+      const opPrevisto = document.getElementById("opPrevisto").value;
+      const opSolicitada = document.getElementById("opSolicitada").value;
+      const opPlanificada = document.getElementById("opPlanificada").value;
+      const filterRecepcion = document.getElementById("filterRecepcion").value;
+      const filterSec = document.getElementById("filterSec").value;
+      const viewMode = document.getElementById("viewMode").value;
+      const search = document.getElementById("searchInput").value.trim().toLowerCase();
+
+      // Actualizar texto descriptivo de las opciones con la fecha elegida
+      document.getElementById("kpiDetectedRule").textContent =
+        `Corte: ${cutoffStr} · Previsto (${opPrevisto.toUpperCase()}) / Solic. (${opSolicitada.toUpperCase()}) / Planif. (${opPlanificada.toUpperCase()})`;
+
+      let detectedCount = 0;
+      let criticalCount = 0;
+      let pendingCount = 0;
+
+      const evaluated = allRows.map(row => {
+        const okPrevisto = checkDateRule(row.previstoObj, opPrevisto, cutoffInt);
+        const okSolicitada = checkDateRule(row.solicitadaObj, opSolicitada, cutoffInt);
+        const okPlanificada = checkDateRule(row.planificadaObj, opPlanificada, cutoffInt);
+
+        const okRecep =
+          filterRecepcion === "all" ? true :
+          filterRecepcion === "pending" ? !row.recepcion :
+          Boolean(row.recepcion);
+
+        const okSec = filterSec === "all" ? true : row.sec === filterSec;
+
+        const isMatched = okPrevisto && okSolicitada && okPlanificada && okRecep && okSec;
+
+        if (isMatched) {
+          detectedCount++;
+          if (row.ruptura === "S" || row.urgente === "S") criticalCount++;
+          if (!row.recepcion) pendingCount++;
+        }
+
+        return { ...row, isMatched };
+      });
+
+      // Actualizar KPIs
+      document.getElementById("kpiTotal").textContent = allRows.length;
+      document.getElementById("kpiDetected").textContent = detectedCount;
+      document.getElementById("kpiCritical").textContent = criticalCount;
+      document.getElementById("kpiPending").textContent = pendingCount;
+
+      // Filtrar para la vista de la tabla
+      filteredRows = evaluated.filter(r => {
+        if (viewMode === "matched" && !r.isMatched) return false;
+        if (filterSec !== "all" && r.sec !== filterSec) return false;
+        if (search) {
+          const hay = `${r.pedido} ${r.proveedor} ${r.agencia} ${r.expedicion}`.toLowerCase();
+          if (!hay.includes(search)) return false;
+        }
+        return true;
+      });
+
+      // Ordenación
+      if (currentSort.key) {
+        const k = currentSort.key;
+        const dir = currentSort.asc ? 1 : -1;
+        filteredRows.sort((a, b) => {
+          const sortKey =
+            k === "previsto" ? "previstoInt" :
+            k === "solicitada" ? "solicitadaInt" :
+            k === "planificada" ? "planificadaInt" :
+            k === "ejecucion" ? "ejecucionInt" : k;
+          const va = a[sortKey] ?? "";
+          const vb = b[sortKey] ?? "";
+          if (typeof va === "number" && typeof vb === "number") return (va - vb) * dir;
+          return String(va).localeCompare(String(vb), "es", { numeric: true }) * dir;
+        });
+      }
+
+      renderTable(filteredRows, cutoffInt);
+
+      const hasExportable = filteredRows.length > 0;
+      document.getElementById("btnCopyOrders").disabled = !hasExportable;
+      document.getElementById("btnExportExcel").disabled = !hasExportable;
+    }
+
+    function renderTable(rows, cutoffInt) {
+      const tbody = document.getElementById("tableBody");
+      if (allRows.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="17" class="empty-state">
+              Arrastra tu archivo Excel arriba o pulsa en <strong>"🧪 Cargar datos de ejemplo"</strong> para ver cómo funciona.
+            </td>
+          </tr>`;
+        return;
+      }
+
+      if (rows.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="17" class="empty-state">
+              No se han encontrado pedidos que cumplan las condiciones actuales con este filtro.
+              <br/><span style="font-size:0.8rem;">Puedes cambiar el selector superior a "📄 Mostrar TODOS los pedidos del Excel" para revisar todas las filas.</span>
+            </td>
+          </tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map(r => {
+        const prevClass = r.previstoObj && r.previstoObj.int > cutoffInt ? "date-late" : "";
+        const solClass  = r.solicitadaObj && r.solicitadaObj.int < cutoffInt ? "date-early" : "";
+        const planClass = r.planificadaObj && r.planificadaObj.int < cutoffInt ? "date-early" : "";
+
+        const urgBadge = r.urgente === "S"
+          ? `<span class="badge badge-danger">S</span>`
+          : `<span class="badge badge-neutral">${r.urgente || "N"}</span>`;
+
+        const rupBadge = r.ruptura === "S"
+          ? `<span class="badge badge-warning">S</span>`
+          : `<span class="badge badge-neutral">${r.ruptura || "N"}</span>`;
+
+        const recBadge = r.recepcion
+          ? `<span class="badge badge-success">${r.recepcion}</span>`
+          : `<span class="badge badge-neutral">Pendiente</span>`;
+
+        return `
+          <tr class="${r.isMatched ? "row-matched" : ""}">
+            <td><strong>${r.sec}</strong></td>
+            <td>${r.tipo}</td>
+            <td><strong>${r.pedido}</strong></td>
+            <td>${urgBadge}</td>
+            <td>${rupBadge}</td>
+            <td>${r.proveedor}</td>
+            <td>${r.ejecucion}</td>
+            <td><span class="${prevClass}">${r.previsto || "-"}</span></td>
+            <td>${r.solicitudCita}</td>
+            <td><span class="${solClass}">${r.solicitada || "-"}</span></td>
+            <td><span class="${planClass}">${r.planificada || "-"}</span></td>
+            <td>${r.expedicion}</td>
+            <td>${r.agencia}</td>
+            <td>${r.paq}</td>
+            <td>${r.pal}</td>
+            <td>${recBadge}</td>
+            <td>${r.valoracion}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // Leer el archivo subido con SheetJS
+    function handleFile(file) {
+      if (!file) return;
+      currentFileName = file.name.replace(/\.[^/.]+$/, "");
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: "array", cellDates: false });
+
+          // Preferir la hoja "Export" si existe, o la primera hoja
+          const targetSheet = workbook.SheetNames.find(n => n.toLowerCase() === "export") || workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[targetSheet];
+          const matrix = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: true, defval: "" });
+
+          allRows = parseSheetMatrix(matrix, targetSheet);
+          const nowStr = new Date().toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+          document.getElementById("fileStatus").textContent = `✅ ${file.name} (${allRows.length} pedidos · cargado a las ${nowStr})`;
+          document.getElementById("dropzone").classList.add("compact");
+
+          applyFiltersAndRender();
+          showToast(`Archivo cargado: ${allRows.length} pedidos leídos`);
+        } catch (err) {
+          console.error(err);
+          alert("Error al leer el archivo Excel. Asegúrate de que sea un archivo .xlsx, .xls o .csv válido.");
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+
+    // Exportar los resultados actuales a un nuevo Excel
+    function exportFilteredToExcel() {
+      if (!filteredRows.length) return;
+      const exportData = filteredRows.map(r => ({
+        "Código Almacén": r.almacen,
+        "Sec": r.sec,
+        "T": r.tipo,
+        "Nº Pedido": r.pedido,
+        "Urgente": r.urgente,
+        "Ruptura": r.ruptura,
+        "Proveedor": r.proveedor,
+        "Ejecución Pedido": r.ejecucion,
+        "Previsto Entrega": r.previsto,
+        "Solicitud de Cita": r.solicitudCita,
+        "Fecha Solicitada": r.solicitada,
+        "Fecha Planificada": r.planificada,
+        "Nº Expedición": r.expedicion,
+        "Agencia": r.agencia,
+        "Paq": r.paq,
+        "Pal": r.pal,
+        "1ª Recepción": r.recepcion,
+        "Fecha Valoración": r.valoracion
+      }));
+
+      const ws = XLSX.utils.json_to_sheet(exportData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Pedidos_Detectados");
+      const dateStamp = new Date().toISOString().slice(0, 10);
+      XLSX.writeFile(wb, `${currentFileName}_detectados_${dateStamp}.xlsx`);
+      showToast("Excel descargado correctamente");
+    }
+
+    // Copiar números de pedido al portapapeles
+    function copyOrderNumbers() {
+      if (!filteredRows.length) return;
+      const list = filteredRows.map(r => r.pedido).filter(Boolean).join("\n");
+      navigator.clipboard.writeText(list).then(() => {
+        showToast(`${filteredRows.length} números de pedido copiados al portapapeles`);
+      });
+    }
+
+    // Datos de prueba reales basados en la captura + casos que cumplen la condición del 13/11
+    function loadSampleData() {
+      const sampleMatrix = [
+        ["Código Almacén", "Sec", "T", "Nº Pedido", "Urgente", "Ruptura", "Proveedor", "Ejecución Pedido", "Previsto Entrega", "Solicitud de Cita", "Fecha Solicitada", "Fecha Planificada", "Nº Expedición", "Agencia", "Paq", "Pal", "1ª Recepción", "Fecha Valoración"],
+        ["", "9", "E", "1805373794", "N", "S", "616900-EUROPEAN AEROSOLS S.", "27/10/2026", "03/11/2026", "29/10/2026", "03/11/2026", "03/11/2026", "28 65028730", "Dhl Parcel Iberia", 1, 0, "", ""],
+        ["", "6", "E", "1805359719", "N", "S", "600060-SIMPSON STRONG TIE S", "22/10/2026", "06/11/2026", "30/10/2026", "02/11/2026", "02/11/2026", "521600", "Dachser Spain", 0, 1, "02/11/2026", "02/11/2026"],
+        ["", "9", "E", "1805373769", "N", "N", "563270-KURBIN LANE (07)", "27/10/2026", "11/11/2026", "28/10/2026", "11/11/2026", "11/11/2026", "1", "", 0, 1, "", ""],
+        ["", "6", "E", "1805383832", "N", "N", "465730-ROUSSEAU SAU", "29/10/2026", "13/11/2026", "02/11/2026", "13/11/2026", "13/11/2026", "28 76545260", "Dhl Parcel Iberia", 0, 1, "", ""],
+        // Ejemplos que cumplen exactamente: Previsto > 13/11/2026 y Solicitada/Planificada < 13/11/2026
+        ["", "2", "E", "1805390112", "S", "S", "561220-RODI INDUSTRIES SA", "28/10/2026", "16/11/2026", "02/11/2026", "09/11/2026", "10/11/2026", "19844", "Dachser Spain", 0, 2, "", ""],
+        ["", "4", "E", "1805390450", "N", "S", "550900-CORTAG EUROPE SLU", "29/10/2026", "18/11/2026", "03/11/2026", "11/11/2026", "11/11/2026", "904112", "Dachser Spain", 0, 1, "", ""],
+        ["", "7", "E", "1805391088", "N", "N", "465600-ARISTON NACIONAL", "30/10/2026", "20/11/2026", "03/11/2026", "12/11/2026", "12/11/2026", "900401990123", "Politrans Ruta 40", 1, 2, "", ""]
+      ];
+
+      currentFileName = "ejemplo_pedidos_recepcion";
+      allRows = parseSheetMatrix(sampleMatrix, "Export (Ejemplo)");
+      document.getElementById("fileStatus").textContent = `🧪 Datos de ejemplo cargados (${allRows.length} pedidos)`;
+      document.getElementById("dropzone").classList.add("compact");
+      applyFiltersAndRender();
+      showToast("Datos de ejemplo cargados (3 pedidos cumplen la condición del 13/11)");
+    }
+
+    // Eventos UI
+    const dropzone = document.getElementById("dropzone");
+    const fileInput = document.getElementById("fileInput");
+
+    dropzone.addEventListener("click", () => fileInput.click());
+    dropzone.addEventListener("dragover", e => {
+      e.preventDefault();
+      dropzone.classList.add("dragover");
+    });
+    dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+    dropzone.addEventListener("drop", e => {
+      e.preventDefault();
+      dropzone.classList.remove("dragover");
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener("change", e => {
+      if (e.target.files && e.target.files.length > 0) {
+        handleFile(e.target.files[0]);
+      }
+    });
+
+    ["cutoffDate", "opPrevisto", "opSolicitada", "opPlanificada", "filterRecepcion", "filterSec", "viewMode"].forEach(id => {
+      document.getElementById(id).addEventListener("change", applyFiltersAndRender);
+    });
+
+    document.getElementById("searchInput").addEventListener("input", applyFiltersAndRender);
+
+    document.getElementById("btnResetRules").addEventListener("click", () => {
+      document.getElementById("cutoffDate").value = "2026-11-13";
+      document.getElementById("opPrevisto").value = "gt";
+      document.getElementById("opSolicitada").value = "lt";
+      document.getElementById("opPlanificada").value = "lt";
+      document.getElementById("filterRecepcion").value = "all";
+      document.getElementById("filterSec").value = "all";
+      applyFiltersAndRender();
+      showToast("Condición restaurada al 13/11/2026");
+    });
+
+    document.getElementById("btnSampleData").addEventListener("click", loadSampleData);
+    document.getElementById("btnExportExcel").addEventListener("click", exportFilteredToExcel);
+    document.getElementById("btnCopyOrders").addEventListener("click", copyOrderNumbers);
+
+    // Ordenación por columnas al hacer clic en la cabecera
+    document.querySelectorAll("#ordersTable thead th[data-sort]").forEach(th => {
+      th.addEventListener("click", () => {
+        const key = th.getAttribute("data-sort");
+        if (currentSort.key === key) {
+          currentSort.asc = !currentSort.asc;
+        } else {
+          currentSort.key = key;
+          currentSort.asc = true;
+        }
+        applyFiltersAndRender();
+      });
+    });
+  </script>
+</body>
+</html>

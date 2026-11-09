@@ -487,9 +487,9 @@
     <!-- Panel de Condiciones de Filtrado -->
     <section class="rules-panel">
       <div class="rules-header">
-        <h2>⚙️ Condición de Detección (Preconfigurada al 13 de Noviembre)</h2>
+        <h2>⚙️ Condición de Detección (Preconfigurada al 12 de Noviembre)</h2>
         <button type="button" class="btn btn-outline" id="btnResetRules" style="padding: 5px 10px; font-size: 0.78rem;">
-          Restaurar regla del 13/11
+          Restaurar regla del 12/11
         </button>
       </div>
 
@@ -497,17 +497,17 @@
         <!-- Fecha de referencia -->
         <div class="field-group">
           <label for="cutoffDate">📅 Fecha de Corte (Referencia)</label>
-          <input type="date" id="cutoffDate" value="2026-11-13" />
+          <input type="date" id="cutoffDate" value="2026-11-12" />
         </div>
 
         <!-- Previsto Entrega (Col I) -->
         <div class="field-group">
           <label for="opPrevisto">Col I · Previsto Entrega</label>
           <select id="opPrevisto">
-            <option value="gt" selected>Posterior a la fecha (&gt; 13/11)</option>
-            <option value="gte">Posterior o igual (&ge; 13/11)</option>
-            <option value="lt">Anterior a la fecha (&lt; 13/11)</option>
-            <option value="lte">Anterior o igual (&le; 13/11)</option>
+            <option value="gt" selected>Posterior a la fecha (&gt; 12/11)</option>
+            <option value="gte">Posterior o igual (&ge; 12/11)</option>
+            <option value="lt">Anterior a la fecha (&lt; 12/11)</option>
+            <option value="lte">Anterior o igual (&le; 12/11)</option>
             <option value="any">Cualquiera (No filtrar)</option>
           </select>
         </div>
@@ -516,11 +516,11 @@
         <div class="field-group">
           <label for="opSolicitada">Col K · Fecha Solicitada</label>
           <select id="opSolicitada">
-            <option value="lt" selected>Anterior a la fecha (&lt; 13/11)</option>
-            <option value="lte">Anterior o igual (&le; 13/11)</option>
-            <option value="lt_or_empty">Anterior (&lt; 13/11) o vacía</option>
-            <option value="gt">Posterior a la fecha (&gt; 13/11)</option>
-            <option value="gte">Posterior o igual (&ge; 13/11)</option>
+            <option value="lt" selected>Anterior a la fecha (&lt; 12/11)</option>
+            <option value="lte">Anterior o igual (&le; 12/11)</option>
+            <option value="lt_or_empty">Anterior (&lt; 12/11) o vacía</option>
+            <option value="gt">Posterior a la fecha (&gt; 12/11)</option>
+            <option value="gte">Posterior o igual (&ge; 12/11)</option>
             <option value="any">Cualquiera (No filtrar)</option>
           </select>
         </div>
@@ -529,11 +529,11 @@
         <div class="field-group">
           <label for="opPlanificada">Col L · Fecha Planificada</label>
           <select id="opPlanificada">
-            <option value="lt" selected>Anterior a la fecha (&lt; 13/11)</option>
-            <option value="lte">Anterior o igual (&le; 13/11)</option>
-            <option value="lt_or_empty">Anterior (&lt; 13/11) o vacía</option>
-            <option value="gt">Posterior a la fecha (&gt; 13/11)</option>
-            <option value="gte">Posterior o igual (&ge; 13/11)</option>
+            <option value="lt" selected>Anterior a la fecha (&lt; 12/11)</option>
+            <option value="lte">Anterior o igual (&le; 12/11)</option>
+            <option value="lt_or_empty">Anterior (&lt; 12/11) o vacía</option>
+            <option value="gt">Posterior a la fecha (&gt; 12/11)</option>
+            <option value="gte">Posterior o igual (&ge; 12/11)</option>
             <option value="any">Cualquiera (No filtrar)</option>
           </select>
         </div>
@@ -563,7 +563,7 @@
       <div class="kpi-card highlight">
         <div class="kpi-label">🚨 Pedidos Detectados</div>
         <div class="kpi-value" id="kpiDetected">0</div>
-        <div class="kpi-sub" id="kpiDetectedRule">Previsto &gt; 13/11 y Solic./Planif. &lt; 13/11</div>
+        <div class="kpi-sub" id="kpiDetectedRule">Previsto &gt; 12/11 y Solic./Planif. &lt; 12/11</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">📋 Total Pedidos en Excel</div>
@@ -726,14 +726,14 @@
 
     // Convertir el input type="date" (YYYY-MM-DD) a entero YYYYMMDD
     function getCutoffInt() {
-      const val = document.getElementById("cutoffDate").value || "2026-11-13";
+      const val = document.getElementById("cutoffDate").value || "2026-11-12";
       const parts = val.split("-");
-      if (parts.length !== 3) return 20261113;
+      if (parts.length !== 3) return 20261112;
       return parseInt(parts[0], 10) * 10000 + parseInt(parts[1], 10) * 100 + parseInt(parts[2], 10);
     }
 
     function formatCutoffDisplay() {
-      const val = document.getElementById("cutoffDate").value || "2026-11-13";
+      const val = document.getElementById("cutoffDate").value || "2026-11-12";
       const [y, m, d] = val.split("-");
       return `${d}/${m}/${y}`;
     }
@@ -1107,7 +1107,7 @@
       document.getElementById("fileStatus").textContent = `🧪 Datos de ejemplo cargados (${allRows.length} pedidos)`;
       document.getElementById("dropzone").classList.add("compact");
       applyFiltersAndRender();
-      showToast("Datos de ejemplo cargados (3 pedidos cumplen la condición del 13/11)");
+      showToast("Datos de ejemplo cargados (pedidos que cumplen la condición del 12/11)");
     }
 
     // Eventos UI
@@ -1141,14 +1141,14 @@
     document.getElementById("searchInput").addEventListener("input", applyFiltersAndRender);
 
     document.getElementById("btnResetRules").addEventListener("click", () => {
-      document.getElementById("cutoffDate").value = "2026-11-13";
+      document.getElementById("cutoffDate").value = "2026-11-12";
       document.getElementById("opPrevisto").value = "gt";
       document.getElementById("opSolicitada").value = "lt";
       document.getElementById("opPlanificada").value = "lt";
       document.getElementById("filterRecepcion").value = "all";
       document.getElementById("filterSec").value = "all";
       applyFiltersAndRender();
-      showToast("Condición restaurada al 13/11/2026");
+      showToast("Condición restaurada al 12/11/2026");
     });
 
     document.getElementById("btnSampleData").addEventListener("click", loadSampleData);

@@ -39,15 +39,15 @@
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.45;
-      padding: 20px;
+      padding: 16px 20px;
     }
 
     .container {
-      max-width: 1480px;
+      max-width: 1600px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
     /* Cabecera */
@@ -55,7 +55,7 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 16px 22px;
+      padding: 14px 20px;
       box-shadow: var(--shadow);
       display: flex;
       flex-wrap: wrap;
@@ -66,7 +66,7 @@
     }
 
     .header-title h1 {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: var(--text);
       display: flex;
@@ -75,7 +75,7 @@
     }
 
     .header-title p {
-      font-size: 0.85rem;
+      font-size: 0.83rem;
       color: var(--muted);
       margin-top: 2px;
     }
@@ -101,7 +101,7 @@
       background: var(--card);
       border: 2px dashed #cbd5e1;
       border-radius: var(--radius);
-      padding: 24px 20px;
+      padding: 20px;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -114,7 +114,7 @@
     }
 
     .dropzone.compact {
-      padding: 12px 18px;
+      padding: 10px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -124,15 +124,15 @@
     }
 
     .dropzone-title {
-      font-size: 1rem;
+      font-size: 0.96rem;
       font-weight: 600;
       color: var(--text);
     }
 
     .dropzone-sub {
-      font-size: 0.83rem;
+      font-size: 0.8rem;
       color: var(--muted);
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     /* Panel de Reglas de Detección */
@@ -140,7 +140,7 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 16px 20px;
+      padding: 14px 18px;
       box-shadow: var(--shadow);
     }
 
@@ -150,13 +150,13 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 14px;
-      padding-bottom: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
       border-bottom: 1px solid var(--border);
     }
 
     .rules-header h2 {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.03em;
@@ -165,34 +165,29 @@
 
     .rules-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+      gap: 12px;
       align-items: end;
     }
 
     .field-group {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 4px;
     }
 
     .field-group label {
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 600;
       color: #475569;
     }
 
-    .field-row {
-      display: flex;
-      gap: 6px;
-    }
-
     select, input[type="date"], input[type="text"] {
       width: 100%;
-      padding: 8px 10px;
+      padding: 7px 9px;
       border: 1px solid #cbd5e1;
       border-radius: 6px;
-      font-size: 0.86rem;
+      font-size: 0.84rem;
       color: var(--text);
       background: #fff;
       outline: none;
@@ -209,9 +204,9 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 8px 14px;
+      padding: 7px 13px;
       border-radius: 6px;
-      font-size: 0.85rem;
+      font-size: 0.83rem;
       font-weight: 600;
       cursor: pointer;
       border: 1px solid transparent;
@@ -255,14 +250,14 @@
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 14px;
+      gap: 12px;
     }
 
     .kpi-card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 14px 18px;
+      padding: 12px 16px;
       box-shadow: var(--shadow);
     }
 
@@ -271,18 +266,30 @@
       background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
     }
 
+    .kpi-card.danger-card {
+      border-color: #fca5a5;
+      background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+      border-left: 4px solid #dc2626;
+    }
+
+    .kpi-card.reagendado-card {
+      border-color: #86efac;
+      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+      border-left: 4px solid #16a34a;
+    }
+
     .kpi-label {
-      font-size: 0.78rem;
-      font-weight: 600;
+      font-size: 0.75rem;
+      font-weight: 700;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 0.03em;
     }
 
     .kpi-value {
-      font-size: 1.75rem;
+      font-size: 1.65rem;
       font-weight: 800;
-      margin-top: 4px;
+      margin-top: 2px;
       color: var(--text);
     }
 
@@ -290,8 +297,16 @@
       color: var(--primary);
     }
 
+    .kpi-card.danger-card .kpi-value {
+      color: #dc2626;
+    }
+
+    .kpi-card.reagendado-card .kpi-value {
+      color: #15803d;
+    }
+
     .kpi-sub {
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       color: var(--muted);
       margin-top: 2px;
     }
@@ -306,33 +321,33 @@
     }
 
     .table-toolbar {
-      padding: 14px 18px;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--border);
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       background: #f8fafc;
     }
 
     .toolbar-left, .toolbar-right {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
     /* Tabla */
     .table-wrapper {
       overflow-x: auto;
-      max-height: 68vh;
+      max-height: 70vh;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       text-align: left;
     }
 
@@ -342,7 +357,7 @@
       background: #f1f5f9;
       color: #334155;
       font-weight: 700;
-      padding: 10px 10px;
+      padding: 9px 8px;
       border-bottom: 2px solid #cbd5e1;
       white-space: nowrap;
       z-index: 2;
@@ -352,6 +367,18 @@
 
     thead th:hover {
       background: #e2e8f0;
+    }
+
+    thead th.th-reagendado {
+      background: #ecfdf5;
+      color: #065f46;
+      border-bottom-color: #34d399;
+    }
+
+    thead th.th-observaciones {
+      background: #eff6ff;
+      color: #1e40af;
+      border-bottom-color: #60a5fa;
     }
 
     tbody tr {
@@ -370,10 +397,28 @@
       background: #fef3c7;
     }
 
+    /* Filas con Fecha Planificada 10/11 o 11/11 en ROJO */
+    tbody tr.row-plan-red {
+      background: #fef2f2 !important;
+      border-left: 5px solid #dc2626;
+    }
+    tbody tr.row-plan-red:hover {
+      background: #fee2e2 !important;
+    }
+    tbody tr.row-plan-red td {
+      color: #7f1d1d;
+    }
+
+    /* Si ya tiene fecha de reagendado, mantener borde rojo de origen pero mostrar tono más controlado */
+    tbody tr.row-plan-red.row-reagendado {
+      background: #fff5f5 !important;
+    }
+
     td {
-      padding: 8px 10px;
+      padding: 7px 8px;
       white-space: nowrap;
       color: #1e293b;
+      vertical-align: middle;
     }
 
     /* Badges */
@@ -381,7 +426,7 @@
       display: inline-block;
       padding: 2px 7px;
       border-radius: 999px;
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       font-weight: 700;
     }
 
@@ -393,11 +438,6 @@
     .badge-warning {
       background: #ffedd5;
       color: #c2410c;
-    }
-
-    .badge-info {
-      background: #e0f2fe;
-      color: #0369a1;
     }
 
     .badge-success {
@@ -426,6 +466,86 @@
       padding: 2px 6px;
       border-radius: 4px;
       border: 1px solid #bae6fd;
+    }
+
+    /* Destacado ROJO especial para Planificada 10/11 y 11/11 */
+    .date-plan-red {
+      color: #ffffff;
+      font-weight: 800;
+      background: #dc2626;
+      padding: 3px 8px;
+      border-radius: 5px;
+      box-shadow: 0 1px 2px rgba(220, 38, 38, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Controles inline para Reagendado y Observaciones */
+    .reagendado-cell {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .reagendado-input {
+      width: 132px !important;
+      padding: 4px 6px !important;
+      font-size: 0.78rem !important;
+      border-radius: 5px !important;
+      border: 1px solid #cbd5e1 !important;
+      background: #ffffff !important;
+      font-weight: 600;
+    }
+
+    .reagendado-input.has-date {
+      background: #dcfce7 !important;
+      border-color: #16a34a !important;
+      color: #14532d !important;
+      font-weight: 700;
+    }
+
+    .reagendado-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #16a34a;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.74rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    .obs-input {
+      width: 220px !important;
+      padding: 5px 8px !important;
+      font-size: 0.79rem !important;
+      border-radius: 5px !important;
+      border: 1px solid #cbd5e1 !important;
+      background: #ffffff !important;
+    }
+
+    .obs-input.has-obs {
+      background: #eff6ff !important;
+      border-color: #3b82f6 !important;
+      color: #1e3a8a !important;
+      font-weight: 600;
+    }
+
+    .btn-clear-mini {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.9rem;
+      line-height: 1;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .btn-clear-mini:hover {
+      color: #dc2626;
+      background: #fee2e2;
     }
 
     .empty-state {
@@ -460,11 +580,11 @@
     <header class="header">
       <div class="header-title">
         <h1>📦 Detector de Pedidos en Recepción</h1>
-        <p>Filtra automáticamente el archivo descargado de recepción (hoja <strong>Export</strong>) según las fechas de entrega, solicitada y planificada.</p>
+        <p>Corte por defecto <strong>12/11/2026</strong> · Resaltado en <strong style="color:#dc2626">ROJO</strong> para planificadas del <strong>10/11 y 11/11</strong> · Guardado automático de fecha de reagendado y observaciones.</p>
       </div>
       <div class="header-actions">
         <span id="fileStatus" class="file-status">Ningún archivo cargado todavía</span>
-        <button type="button" class="btn btn-outline" id="btnSampleData" title="Carga filas de ejemplo como las de tu captura para probar la herramienta">
+        <button type="button" class="btn btn-outline" id="btnSampleData" title="Carga filas de ejemplo para probar la herramienta">
           🧪 Cargar datos de ejemplo
         </button>
       </div>
@@ -474,7 +594,7 @@
     <div class="dropzone" id="dropzone">
       <div>
         <div class="dropzone-title">📂 Arrastra aquí tu Excel (<em>pedidos recepción almacen.xlsx / .xls</em>) o haz clic para seleccionarlo</div>
-        <div class="dropzone-sub">Cuando actualices el Excel 2 veces al día, solo tienes que volver a soltarlo aquí. Todo se procesa en tu ordenador al instante.</div>
+        <div class="dropzone-sub">Tus fechas de reagendado y observaciones se guardan automáticamente por Nº de Pedido aunque subas un Excel nuevo por la tarde o mañana.</div>
       </div>
       <div>
         <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none;" />
@@ -488,9 +608,11 @@
     <section class="rules-panel">
       <div class="rules-header">
         <h2>⚙️ Condición de Detección (Preconfigurada al 12 de Noviembre)</h2>
-        <button type="button" class="btn btn-outline" id="btnResetRules" style="padding: 5px 10px; font-size: 0.78rem;">
-          Restaurar regla del 12/11
-        </button>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-outline" id="btnResetRules" style="padding: 5px 10px; font-size: 0.78rem;">
+            Restaurar regla del 12/11
+          </button>
+        </div>
       </div>
 
       <div class="rules-grid">
@@ -538,6 +660,19 @@
           </select>
         </div>
 
+        <!-- Filtro rápido Planificada 10/11 - 11/11 y Reagendados -->
+        <div class="field-group">
+          <label for="filterSpecial">🔴 Alerta 10-11/11 y Reagendados</label>
+          <select id="filterSpecial">
+            <option value="all" selected>Todos</option>
+            <option value="plan10_11">🔴 Solo Planificada 10/11 o 11/11</option>
+            <option value="plan10_11_pending">🔴 10/11 o 11/11 SIN reagendar</option>
+            <option value="reagendados">✅ Ya reagendados (Con fecha)</option>
+            <option value="sin_reagendar">⏳ Pendientes de reagendar</option>
+            <option value="con_obs">📝 Con observaciones</option>
+          </select>
+        </div>
+
         <!-- 1ª Recepción (Col Q) -->
         <div class="field-group">
           <label for="filterRecepcion">Col Q · Estado 1ª Recepción</label>
@@ -548,7 +683,7 @@
           </select>
         </div>
 
-        <!-- Sección / Urgente / Ruptura -->
+        <!-- Sección -->
         <div class="field-group">
           <label for="filterSec">Col B · Sección (Sec)</label>
           <select id="filterSec">
@@ -565,20 +700,25 @@
         <div class="kpi-value" id="kpiDetected">0</div>
         <div class="kpi-sub" id="kpiDetectedRule">Previsto &gt; 12/11 y Solic./Planif. &lt; 12/11</div>
       </div>
+      <div class="kpi-card danger-card">
+        <div class="kpi-label">🔴 Planificada 10/11 y 11/11</div>
+        <div class="kpi-value" id="kpiPlan1011">0</div>
+        <div class="kpi-sub" id="kpiPlan1011Sub">Marcados en rojo en la tabla</div>
+      </div>
+      <div class="kpi-card reagendado-card">
+        <div class="kpi-label">✅ Pedidos Reagendados</div>
+        <div class="kpi-value" id="kpiReagendados">0</div>
+        <div class="kpi-sub" id="kpiReagendadosSub">Con nueva fecha u observación guardada</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">⚠️ Con Ruptura / Urgente</div>
+        <div class="kpi-value" id="kpiCritical">0</div>
+        <div class="kpi-sub">De los detectados (Rup=S o Urg=S)</div>
+      </div>
       <div class="kpi-card">
         <div class="kpi-label">📋 Total Pedidos en Excel</div>
         <div class="kpi-value" id="kpiTotal">0</div>
         <div class="kpi-sub" id="kpiSheetName">Hoja: -</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">⚠️ Detectados con Ruptura / Urgente</div>
-        <div class="kpi-value" id="kpiCritical">0</div>
-        <div class="kpi-sub" id="kpiCriticalSub">Ruptura = S o Urgente = S</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">⏳ Detectados Pendientes Recepción</div>
-        <div class="kpi-value" id="kpiPending">0</div>
-        <div class="kpi-sub">Sin fecha en 1ª Recepción</div>
       </div>
     </section>
 
@@ -590,14 +730,14 @@
             <option value="matched" selected>🎯 Mostrar SOLO pedidos detectados</option>
             <option value="all">📄 Mostrar TODOS los pedidos del Excel</option>
           </select>
-          <input type="text" id="searchInput" placeholder="🔍 Buscar Nº Pedido, Proveedor, Agencia..." style="width: 280px;" />
+          <input type="text" id="searchInput" placeholder="🔍 Buscar Nº Pedido, Proveedor, Observación..." style="width: 290px;" />
         </div>
         <div class="toolbar-right">
           <button type="button" class="btn btn-outline" id="btnCopyOrders" disabled>
             📋 Copiar Nº Pedidos
           </button>
           <button type="button" class="btn btn-success" id="btnExportExcel" disabled>
-            📥 Descargar Excel Filtrado (.xlsx)
+            📥 Descargar Excel con Reagendados (.xlsx)
           </button>
         </div>
       </div>
@@ -612,11 +752,13 @@
               <th data-sort="urgente">Urg</th>
               <th data-sort="ruptura">Rup</th>
               <th data-sort="proveedor">Proveedor</th>
-              <th data-sort="ejecucion">Ejecución Pedido</th>
               <th data-sort="previsto">Previsto Entrega (I)</th>
-              <th data-sort="solicitudCita">Solicitud Cita</th>
               <th data-sort="solicitada">Fecha Solicitada (K)</th>
               <th data-sort="planificada">Fecha Planificada (L)</th>
+              <th data-sort="reagendado" class="th-reagendado">📅 Fecha Reagendado</th>
+              <th data-sort="observaciones" class="th-observaciones">📝 Observaciones</th>
+              <th data-sort="ejecucion">Ejecución Pedido</th>
+              <th data-sort="solicitudCita">Solicitud Cita</th>
               <th data-sort="expedicion">Nº Expedición</th>
               <th data-sort="agencia">Agencia</th>
               <th data-sort="paq">Paq</th>
@@ -627,7 +769,7 @@
           </thead>
           <tbody id="tableBody">
             <tr>
-              <td colspan="17" class="empty-state">
+              <td colspan="19" class="empty-state">
                 Arrastra tu archivo Excel arriba o pulsa en <strong>"🧪 Cargar datos de ejemplo"</strong> para ver cómo funciona.
               </td>
             </tr>
@@ -640,21 +782,89 @@
   <div id="toast" class="toast"></div>
 
   <script>
+    const STORAGE_KEY = "klys_pedidos_annotations_v1";
+
     // Estado global
     let allRows = [];
     let filteredRows = [];
     let currentSort = { key: null, asc: true };
     let currentFileName = "pedidos_recepcion";
+    let annotationsMap = loadAnnotations();
+
+    function loadAnnotations() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveAnnotations() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(annotationsMap));
+      } catch (e) {
+        console.error("No se pudo guardar en localStorage:", e);
+      }
+    }
+
+    function getOrderAnnotation(pedido) {
+      if (!pedido) return { reagendado: "", obs: "" };
+      return annotationsMap[pedido] || { reagendado: "", obs: "" };
+    }
+
+    function formatIsoToDisplay(isoStr) {
+      if (!isoStr) return "";
+      const parts = isoStr.split("-");
+      if (parts.length !== 3) return isoStr;
+      return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+
+    // Actualizar fecha de reagendado de un pedido
+    window.onReagendadoChange = function(pedido, isoDateVal) {
+      if (!pedido) return;
+      const current = annotationsMap[pedido] || { reagendado: "", obs: "" };
+      current.reagendado = isoDateVal || "";
+      if (!current.reagendado && !current.obs) {
+        delete annotationsMap[pedido];
+      } else {
+        annotationsMap[pedido] = current;
+      }
+      saveAnnotations();
+      applyFiltersAndRender(false);
+      if (isoDateVal) {
+        showToast(`📅 Pedido ${pedido} reagendado al ${formatIsoToDisplay(isoDateVal)}`);
+      } else {
+        showToast(`Fecha de reagendado borrada en pedido ${pedido}`);
+      }
+    };
+
+    // Actualizar observaciones de un pedido en tiempo real
+    window.onObsInput = function(pedido, textVal, inputEl) {
+      if (!pedido) return;
+      const current = annotationsMap[pedido] || { reagendado: "", obs: "" };
+      current.obs = textVal || "";
+      if (!current.reagendado && !current.obs) {
+        delete annotationsMap[pedido];
+      } else {
+        annotationsMap[pedido] = current;
+      }
+      saveAnnotations();
+      if (inputEl) {
+        inputEl.classList.toggle("has-obs", Boolean(textVal && textVal.trim()));
+      }
+      updateKpiCountersOnly();
+    };
 
     // Utilidad para mostrar avisos rápidos
     function showToast(msg) {
       const t = document.getElementById("toast");
       t.textContent = msg;
       t.classList.add("show");
-      setTimeout(() => t.classList.remove("show"), 2800);
+      setTimeout(() => t.classList.remove("show"), 2600);
     }
 
-    // Normalizar texto de cabecera para encontrar columnas sin importar tildes o mayúsculas
+    // Normalizar texto de cabecera
     function normHeader(str) {
       return String(str || "")
         .trim()
@@ -665,7 +875,6 @@
     }
 
     // Parsear cualquier fecha del Excel (DD/MM/YYYY, número serie Excel, YYYY-MM-DD o Date)
-    // Devuelve un entero YYYYMMDD para comparaciones exactas sin problemas de zona horaria
     function parseExcelDate(val) {
       if (val === null || val === undefined || val === "") return null;
 
@@ -679,7 +888,6 @@
         };
       }
 
-      // Si es número de serie de Excel (ej. 46339 -> Nov 2026)
       if (typeof val === "number" && val > 25000 && val < 80000) {
         const utcDays = Math.floor(val - 25569);
         const utcValue = utcDays * 86400 * 1000;
@@ -696,7 +904,6 @@
       const str = String(val).trim();
       if (!str) return null;
 
-      // Formato DD/MM/YYYY o DD-MM-YYYY (con o sin hora detrás)
       const dmy = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
       if (dmy) {
         const d = parseInt(dmy[1], 10);
@@ -709,7 +916,6 @@
         };
       }
 
-      // Formato YYYY-MM-DD
       const ymd = str.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
       if (ymd) {
         const y = parseInt(ymd[1], 10);
@@ -724,7 +930,13 @@
       return null;
     }
 
-    // Convertir el input type="date" (YYYY-MM-DD) a entero YYYYMMDD
+    // Comprobar si la Fecha Planificada es 10/11 o 11/11
+    function isPlanificada10or11Nov(planObj) {
+      if (!planObj) return false;
+      const md = planObj.int % 10000; // MMDD
+      return md === 1110 || md === 1111;
+    }
+
     function getCutoffInt() {
       const val = document.getElementById("cutoffDate").value || "2026-11-12";
       const parts = val.split("-");
@@ -738,7 +950,6 @@
       return `${d}/${m}/${y}`;
     }
 
-    // Evaluar un operador sobre una fecha
     function checkDateRule(dateObj, op, cutoffInt) {
       if (op === "any") return true;
       if (!dateObj) {
@@ -755,11 +966,9 @@
       }
     }
 
-    // Mapear una matriz de filas del Excel a nuestros objetos estructurados
     function parseSheetMatrix(matrix, sheetName) {
       if (!matrix || matrix.length === 0) return [];
 
-      // Buscar la fila de cabecera (donde aparece "Nº Pedido" o "Previsto Entrega")
       let headerRowIndex = 0;
       for (let i = 0; i < Math.min(10, matrix.length); i++) {
         const rowNorm = (matrix[i] || []).map(normHeader).join("|");
@@ -771,7 +980,6 @@
 
       const headers = (matrix[headerRowIndex] || []).map(normHeader);
 
-      // Función para localizar el índice de cada columna por nombre o usar el índice por defecto de la captura (A..R)
       function findCol(keywords, fallbackIndex) {
         for (let idx = 0; idx < headers.length; idx++) {
           const h = headers[idx];
@@ -782,24 +990,24 @@
         return fallbackIndex;
       }
 
-      const idxAlmacen      = findCol(["codigo almacen", "almacen"], 0);
-      const idxSec          = findCol(["sec"], 1);
-      const idxTipo         = findCol(["t", "tipo"], 2);
-      const idxPedido       = findCol(["nº pedido", "no pedido", "num pedido", "numero pedido"], 3);
-      const idxUrgente      = findCol(["urgente"], 4);
-      const idxRuptura      = findCol(["ruptura"], 5);
-      const idxProveedor    = findCol(["proveedor"], 6);
-      const idxEjecucion    = findCol(["ejecucion pedido", "ejecucion"], 7);
-      const idxPrevisto     = findCol(["previsto entrega", "previsto"], 8);
-      const idxSolicitudCita= findCol(["solicitud de cita", "solicitud cita"], 9);
-      const idxSolicitada   = findCol(["fecha solicitada", "solicitada"], 10);
-      const idxPlanificada  = findCol(["fecha planificada", "planificada"], 11);
-      const idxExpedicion   = findCol(["nº expedicion", "expedicion"], 12);
-      const idxAgencia      = findCol(["agencia"], 13);
-      const idxPaq          = findCol(["paq"], 14);
-      const idxPal          = findCol(["pal"], 15);
-      const idxRecepcion    = findCol(["1ª recepcion", "1a recepcion", "recepcion"], 16);
-      const idxValoracion   = findCol(["fecha valoracion", "valoracion"], 17);
+      const idxAlmacen       = findCol(["codigo almacen", "almacen"], 0);
+      const idxSec           = findCol(["sec"], 1);
+      const idxTipo          = findCol(["t", "tipo"], 2);
+      const idxPedido        = findCol(["nº pedido", "no pedido", "num pedido", "numero pedido"], 3);
+      const idxUrgente       = findCol(["urgente"], 4);
+      const idxRuptura       = findCol(["ruptura"], 5);
+      const idxProveedor     = findCol(["proveedor"], 6);
+      const idxEjecucion     = findCol(["ejecucion pedido", "ejecucion"], 7);
+      const idxPrevisto      = findCol(["previsto entrega", "previsto"], 8);
+      const idxSolicitudCita = findCol(["solicitud de cita", "solicitud cita"], 9);
+      const idxSolicitada    = findCol(["fecha solicitada", "solicitada"], 10);
+      const idxPlanificada   = findCol(["fecha planificada", "planificada"], 11);
+      const idxExpedicion    = findCol(["nº expedicion", "expedicion"], 12);
+      const idxAgencia       = findCol(["agencia"], 13);
+      const idxPaq           = findCol(["paq"], 14);
+      const idxPal           = findCol(["pal"], 15);
+      const idxRecepcion     = findCol(["1ª recepcion", "1a recepcion", "recepcion"], 16);
+      const idxValoracion    = findCol(["fecha valoracion", "valoracion"], 17);
 
       const parsed = [];
       for (let r = headerRowIndex + 1; r < matrix.length; r++) {
@@ -839,6 +1047,7 @@
           planificada: planificadaObj ? planificadaObj.display : (row[idxPlanificada] ?? ""),
           planificadaObj,
           planificadaInt: planificadaObj ? planificadaObj.int : 0,
+          isPlan1011: isPlanificada10or11Nov(planificadaObj),
           expedicion: row[idxExpedicion] !== undefined ? String(row[idxExpedicion]).trim() : "",
           agencia: row[idxAgencia] !== undefined ? String(row[idxAgencia]).trim() : "",
           paq: row[idxPaq] ?? "",
@@ -867,6 +1076,54 @@
       if (secs.includes(currentVal)) sel.value = currentVal;
     }
 
+    function updateKpiCountersOnly() {
+      const cutoffInt = getCutoffInt();
+      const opPrevisto = document.getElementById("opPrevisto").value;
+      const opSolicitada = document.getElementById("opSolicitada").value;
+      const opPlanificada = document.getElementById("opPlanificada").value;
+      const filterRecepcion = document.getElementById("filterRecepcion").value;
+      const filterSec = document.getElementById("filterSec").value;
+
+      let detectedCount = 0;
+      let criticalCount = 0;
+      let plan1011Count = 0;
+      let plan1011Reagendados = 0;
+      let reagendadosCount = 0;
+
+      allRows.forEach(row => {
+        const ann = getOrderAnnotation(row.pedido);
+        const okPrevisto = checkDateRule(row.previstoObj, opPrevisto, cutoffInt);
+        const okSolicitada = checkDateRule(row.solicitadaObj, opSolicitada, cutoffInt);
+        const okPlanificada = checkDateRule(row.planificadaObj, opPlanificada, cutoffInt);
+        const okRecep =
+          filterRecepcion === "all" ? true :
+          filterRecepcion === "pending" ? !row.recepcion :
+          Boolean(row.recepcion);
+        const okSec = filterSec === "all" ? true : row.sec === filterSec;
+
+        const isMatched = okPrevisto && okSolicitada && okPlanificada && okRecep && okSec;
+        if (isMatched) {
+          detectedCount++;
+          if (row.ruptura === "S" || row.urgente === "S") criticalCount++;
+          if (row.isPlan1011) {
+            plan1011Count++;
+            if (ann.reagendado) plan1011Reagendados++;
+          }
+          if (ann.reagendado) reagendadosCount++;
+        }
+      });
+
+      document.getElementById("kpiTotal").textContent = allRows.length;
+      document.getElementById("kpiDetected").textContent = detectedCount;
+      document.getElementById("kpiCritical").textContent = criticalCount;
+      document.getElementById("kpiPlan1011").textContent = plan1011Count;
+      document.getElementById("kpiPlan1011Sub").textContent =
+        plan1011Count > 0
+          ? `${plan1011Count - plan1011Reagendados} pendientes · ${plan1011Reagendados} reagendados`
+          : `Marcados en rojo en la tabla`;
+      document.getElementById("kpiReagendados").textContent = reagendadosCount;
+    }
+
     // Aplicar las reglas y actualizar tabla y KPIs
     function applyFiltersAndRender() {
       const cutoffInt = getCutoffInt();
@@ -874,20 +1131,17 @@
       const opPrevisto = document.getElementById("opPrevisto").value;
       const opSolicitada = document.getElementById("opSolicitada").value;
       const opPlanificada = document.getElementById("opPlanificada").value;
+      const filterSpecial = document.getElementById("filterSpecial").value;
       const filterRecepcion = document.getElementById("filterRecepcion").value;
       const filterSec = document.getElementById("filterSec").value;
       const viewMode = document.getElementById("viewMode").value;
       const search = document.getElementById("searchInput").value.trim().toLowerCase();
 
-      // Actualizar texto descriptivo de las opciones con la fecha elegida
       document.getElementById("kpiDetectedRule").textContent =
         `Corte: ${cutoffStr} · Previsto (${opPrevisto.toUpperCase()}) / Solic. (${opSolicitada.toUpperCase()}) / Planif. (${opPlanificada.toUpperCase()})`;
 
-      let detectedCount = 0;
-      let criticalCount = 0;
-      let pendingCount = 0;
-
       const evaluated = allRows.map(row => {
+        const ann = getOrderAnnotation(row.pedido);
         const okPrevisto = checkDateRule(row.previstoObj, opPrevisto, cutoffInt);
         const okSolicitada = checkDateRule(row.solicitadaObj, opSolicitada, cutoffInt);
         const okPlanificada = checkDateRule(row.planificadaObj, opPlanificada, cutoffInt);
@@ -901,27 +1155,30 @@
 
         const isMatched = okPrevisto && okSolicitada && okPlanificada && okRecep && okSec;
 
-        if (isMatched) {
-          detectedCount++;
-          if (row.ruptura === "S" || row.urgente === "S") criticalCount++;
-          if (!row.recepcion) pendingCount++;
-        }
-
-        return { ...row, isMatched };
+        return {
+          ...row,
+          isMatched,
+          reagendado: ann.reagendado || "",
+          reagendadoDisplay: formatIsoToDisplay(ann.reagendado || ""),
+          observaciones: ann.obs || ""
+        };
       });
 
-      // Actualizar KPIs
-      document.getElementById("kpiTotal").textContent = allRows.length;
-      document.getElementById("kpiDetected").textContent = detectedCount;
-      document.getElementById("kpiCritical").textContent = criticalCount;
-      document.getElementById("kpiPending").textContent = pendingCount;
+      updateKpiCountersOnly();
 
       // Filtrar para la vista de la tabla
       filteredRows = evaluated.filter(r => {
         if (viewMode === "matched" && !r.isMatched) return false;
         if (filterSec !== "all" && r.sec !== filterSec) return false;
+
+        if (filterSpecial === "plan10_11" && !r.isPlan1011) return false;
+        if (filterSpecial === "plan10_11_pending" && (!r.isPlan1011 || r.reagendado)) return false;
+        if (filterSpecial === "reagendados" && !r.reagendado) return false;
+        if (filterSpecial === "sin_reagendar" && r.reagendado) return false;
+        if (filterSpecial === "con_obs" && !r.observaciones.trim()) return false;
+
         if (search) {
-          const hay = `${r.pedido} ${r.proveedor} ${r.agencia} ${r.expedicion}`.toLowerCase();
+          const hay = `${r.pedido} ${r.proveedor} ${r.agencia} ${r.expedicion} ${r.observaciones} ${r.reagendadoDisplay}`.toLowerCase();
           if (!hay.includes(search)) return false;
         }
         return true;
@@ -951,12 +1208,20 @@
       document.getElementById("btnExportExcel").disabled = !hasExportable;
     }
 
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
     function renderTable(rows, cutoffInt) {
       const tbody = document.getElementById("tableBody");
       if (allRows.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="17" class="empty-state">
+            <td colspan="19" class="empty-state">
               Arrastra tu archivo Excel arriba o pulsa en <strong>"🧪 Cargar datos de ejemplo"</strong> para ver cómo funciona.
             </td>
           </tr>`;
@@ -966,7 +1231,7 @@
       if (rows.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="17" class="empty-state">
+            <td colspan="19" class="empty-state">
               No se han encontrado pedidos que cumplan las condiciones actuales con este filtro.
               <br/><span style="font-size:0.8rem;">Puedes cambiar el selector superior a "📄 Mostrar TODOS los pedidos del Excel" para revisar todas las filas.</span>
             </td>
@@ -977,7 +1242,15 @@
       tbody.innerHTML = rows.map(r => {
         const prevClass = r.previstoObj && r.previstoObj.int > cutoffInt ? "date-late" : "";
         const solClass  = r.solicitadaObj && r.solicitadaObj.int < cutoffInt ? "date-early" : "";
-        const planClass = r.planificadaObj && r.planificadaObj.int < cutoffInt ? "date-early" : "";
+
+        // Si la Fecha Planificada es 10/11 o 11/11 -> marcar en ROJO
+        let planHtml = "";
+        if (r.isPlan1011) {
+          planHtml = `<span class="date-plan-red" title="Alerta: Fecha Planificada 10/11 o 11/11">🚨 ${r.planificada}</span>`;
+        } else {
+          const planClass = r.planificadaObj && r.planificadaObj.int < cutoffInt ? "date-early" : "";
+          planHtml = `<span class="${planClass}">${r.planificada || "-"}</span>`;
+        }
 
         const urgBadge = r.urgente === "S"
           ? `<span class="badge badge-danger">S</span>`
@@ -991,19 +1264,52 @@
           ? `<span class="badge badge-success">${r.recepcion}</span>`
           : `<span class="badge badge-neutral">Pendiente</span>`;
 
+        const rowClasses = [
+          r.isMatched ? "row-matched" : "",
+          r.isPlan1011 ? "row-plan-red" : "",
+          r.reagendado ? "row-reagendado" : ""
+        ].filter(Boolean).join(" ");
+
+        const safePedido = escapeHtml(r.pedido);
+        const safeObs = escapeHtml(r.observaciones);
+
         return `
-          <tr class="${r.isMatched ? "row-matched" : ""}">
+          <tr class="${rowClasses}">
             <td><strong>${r.sec}</strong></td>
             <td>${r.tipo}</td>
             <td><strong>${r.pedido}</strong></td>
             <td>${urgBadge}</td>
             <td>${rupBadge}</td>
             <td>${r.proveedor}</td>
-            <td>${r.ejecucion}</td>
             <td><span class="${prevClass}">${r.previsto || "-"}</span></td>
-            <td>${r.solicitudCita}</td>
             <td><span class="${solClass}">${r.solicitada || "-"}</span></td>
-            <td><span class="${planClass}">${r.planificada || "-"}</span></td>
+            <td>${planHtml}</td>
+            <td>
+              <div class="reagendado-cell">
+                <input
+                  type="date"
+                  class="reagendado-input ${r.reagendado ? "has-date" : ""}"
+                  value="${r.reagendado}"
+                  onchange="onReagendadoChange('${safePedido}', this.value)"
+                  title="Selecciona la fecha en que se ha reagendado este pedido"
+                />
+                ${r.reagendado
+                  ? `<span class="reagendado-badge" title="Reagendado al ${r.reagendadoDisplay}">✅ ${r.reagendadoDisplay}</span>
+                     <button type="button" class="btn-clear-mini" onclick="onReagendadoChange('${safePedido}', '')" title="Borrar fecha reagendado">✕</button>`
+                  : ""}
+              </div>
+            </td>
+            <td>
+              <input
+                type="text"
+                class="obs-input ${r.observaciones.trim() ? "has-obs" : ""}"
+                placeholder="Escribir observación..."
+                value="${safeObs}"
+                oninput="onObsInput('${safePedido}', this.value, this)"
+              />
+            </td>
+            <td>${r.ejecucion}</td>
+            <td>${r.solicitudCita}</td>
             <td>${r.expedicion}</td>
             <td>${r.agencia}</td>
             <td>${r.paq}</td>
@@ -1026,7 +1332,6 @@
           const data = new Uint8Array(e.target.result);
           const workbook = XLSX.read(data, { type: "array", cellDates: false });
 
-          // Preferir la hoja "Export" si existe, o la primera hoja
           const targetSheet = workbook.SheetNames.find(n => n.toLowerCase() === "export") || workbook.SheetNames[0];
           const worksheet = workbook.Sheets[targetSheet];
           const matrix = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: true, defval: "" });
@@ -1047,7 +1352,7 @@
       reader.readAsArrayBuffer(file);
     }
 
-    // Exportar los resultados actuales a un nuevo Excel
+    // Exportar los resultados actuales a un nuevo Excel incluyendo Fecha Reagendado y Observaciones
     function exportFilteredToExcel() {
       if (!filteredRows.length) return;
       const exportData = filteredRows.map(r => ({
@@ -1058,11 +1363,14 @@
         "Urgente": r.urgente,
         "Ruptura": r.ruptura,
         "Proveedor": r.proveedor,
-        "Ejecución Pedido": r.ejecucion,
         "Previsto Entrega": r.previsto,
-        "Solicitud de Cita": r.solicitudCita,
         "Fecha Solicitada": r.solicitada,
         "Fecha Planificada": r.planificada,
+        "Alerta 10-11/11": r.isPlan1011 ? "ROJO (10/11 o 11/11)" : "",
+        "Fecha Reagendado": r.reagendadoDisplay,
+        "Observaciones": r.observaciones,
+        "Ejecución Pedido": r.ejecucion,
+        "Solicitud de Cita": r.solicitudCita,
         "Nº Expedición": r.expedicion,
         "Agencia": r.agencia,
         "Paq": r.paq,
@@ -1076,7 +1384,7 @@
       XLSX.utils.book_append_sheet(wb, ws, "Pedidos_Detectados");
       const dateStamp = new Date().toISOString().slice(0, 10);
       XLSX.writeFile(wb, `${currentFileName}_detectados_${dateStamp}.xlsx`);
-      showToast("Excel descargado correctamente");
+      showToast("Excel descargado con fechas de reagendado y observaciones");
     }
 
     // Copiar números de pedido al portapapeles
@@ -1088,18 +1396,14 @@
       });
     }
 
-    // Datos de prueba reales basados en la captura + casos que cumplen la condición del 13/11
+    // Datos de prueba reales incluyendo casos con planificada 10/11 y 11/11
     function loadSampleData() {
       const sampleMatrix = [
         ["Código Almacén", "Sec", "T", "Nº Pedido", "Urgente", "Ruptura", "Proveedor", "Ejecución Pedido", "Previsto Entrega", "Solicitud de Cita", "Fecha Solicitada", "Fecha Planificada", "Nº Expedición", "Agencia", "Paq", "Pal", "1ª Recepción", "Fecha Valoración"],
         ["", "9", "E", "1805373794", "N", "S", "616900-EUROPEAN AEROSOLS S.", "27/10/2026", "03/11/2026", "29/10/2026", "03/11/2026", "03/11/2026", "28 65028730", "Dhl Parcel Iberia", 1, 0, "", ""],
-        ["", "6", "E", "1805359719", "N", "S", "600060-SIMPSON STRONG TIE S", "22/10/2026", "06/11/2026", "30/10/2026", "02/11/2026", "02/11/2026", "521600", "Dachser Spain", 0, 1, "02/11/2026", "02/11/2026"],
-        ["", "9", "E", "1805373769", "N", "N", "563270-KURBIN LANE (07)", "27/10/2026", "11/11/2026", "28/10/2026", "11/11/2026", "11/11/2026", "1", "", 0, 1, "", ""],
-        ["", "6", "E", "1805383832", "N", "N", "465730-ROUSSEAU SAU", "29/10/2026", "13/11/2026", "02/11/2026", "13/11/2026", "13/11/2026", "28 76545260", "Dhl Parcel Iberia", 0, 1, "", ""],
-        // Ejemplos que cumplen exactamente: Previsto > 13/11/2026 y Solicitada/Planificada < 13/11/2026
         ["", "2", "E", "1805390112", "S", "S", "561220-RODI INDUSTRIES SA", "28/10/2026", "16/11/2026", "02/11/2026", "09/11/2026", "10/11/2026", "19844", "Dachser Spain", 0, 2, "", ""],
         ["", "4", "E", "1805390450", "N", "S", "550900-CORTAG EUROPE SLU", "29/10/2026", "18/11/2026", "03/11/2026", "11/11/2026", "11/11/2026", "904112", "Dachser Spain", 0, 1, "", ""],
-        ["", "7", "E", "1805391088", "N", "N", "465600-ARISTON NACIONAL", "30/10/2026", "20/11/2026", "03/11/2026", "12/11/2026", "12/11/2026", "900401990123", "Politrans Ruta 40", 1, 2, "", ""]
+        ["", "7", "E", "1805391088", "N", "N", "465600-ARISTON NACIONAL", "30/10/2026", "20/11/2026", "03/11/2026", "06/11/2026", "06/11/2026", "900401990123", "Politrans Ruta 40", 1, 2, "", ""]
       ];
 
       currentFileName = "ejemplo_pedidos_recepcion";
@@ -1107,7 +1411,7 @@
       document.getElementById("fileStatus").textContent = `🧪 Datos de ejemplo cargados (${allRows.length} pedidos)`;
       document.getElementById("dropzone").classList.add("compact");
       applyFiltersAndRender();
-      showToast("Datos de ejemplo cargados (pedidos que cumplen la condición del 12/11)");
+      showToast("Datos de ejemplo cargados (incluye pedidos del 10/11 y 11/11 en rojo)");
     }
 
     // Eventos UI
@@ -1134,7 +1438,7 @@
       }
     });
 
-    ["cutoffDate", "opPrevisto", "opSolicitada", "opPlanificada", "filterRecepcion", "filterSec", "viewMode"].forEach(id => {
+    ["cutoffDate", "opPrevisto", "opSolicitada", "opPlanificada", "filterSpecial", "filterRecepcion", "filterSec", "viewMode"].forEach(id => {
       document.getElementById(id).addEventListener("change", applyFiltersAndRender);
     });
 
@@ -1145,6 +1449,7 @@
       document.getElementById("opPrevisto").value = "gt";
       document.getElementById("opSolicitada").value = "lt";
       document.getElementById("opPlanificada").value = "lt";
+      document.getElementById("filterSpecial").value = "all";
       document.getElementById("filterRecepcion").value = "all";
       document.getElementById("filterSec").value = "all";
       applyFiltersAndRender();

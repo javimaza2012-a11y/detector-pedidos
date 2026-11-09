@@ -43,7 +43,7 @@
     }
 
     .container {
-      max-width: 1600px;
+      max-width: 1640px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
@@ -75,7 +75,7 @@
     }
 
     .header-title p {
-      font-size: 0.83rem;
+      font-size: 0.82rem;
       color: var(--muted);
       margin-top: 2px;
     }
@@ -101,7 +101,7 @@
       background: var(--card);
       border: 2px dashed #cbd5e1;
       border-radius: var(--radius);
-      padding: 20px;
+      padding: 18px 20px;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -124,7 +124,7 @@
     }
 
     .dropzone-title {
-      font-size: 0.96rem;
+      font-size: 0.95rem;
       font-weight: 600;
       color: var(--text);
     }
@@ -198,6 +198,35 @@
       box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.15);
     }
 
+    .keep-edited-bar {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.83rem;
+    }
+
+    .checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #0f172a;
+      user-select: none;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--success);
+      cursor: pointer;
+    }
+
     /* Botones */
     .btn {
       display: inline-flex;
@@ -241,6 +270,14 @@
       background: #15803d;
     }
 
+    .btn-blue {
+      background: #0284c7;
+      color: #fff;
+    }
+    .btn-blue:hover {
+      background: #0369a1;
+    }
+
     .btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
@@ -259,6 +296,11 @@
       border-radius: var(--radius);
       padding: 12px 16px;
       box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.12s ease;
+    }
+    .kpi-card:hover {
+      transform: translateY(-1px);
     }
 
     .kpi-card.highlight {
@@ -409,9 +451,19 @@
       color: #7f1d1d;
     }
 
-    /* Si ya tiene fecha de reagendado, mantener borde rojo de origen pero mostrar tono más controlado */
+    /* Fila que ya ha sido reagendada/guardada */
+    tbody tr.row-reagendado {
+      background: #f0fdf4 !important;
+      border-left: 5px solid #16a34a;
+    }
+    tbody tr.row-reagendado:hover {
+      background: #dcfce7 !important;
+    }
+
+    /* Si era del 10/11 o 11/11 y además ya está reagendada */
     tbody tr.row-plan-red.row-reagendado {
-      background: #fff5f5 !important;
+      background: #fefce8 !important;
+      border-left: 5px solid #16a34a;
     }
 
     td {
@@ -485,11 +537,11 @@
     .reagendado-cell {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .reagendado-input {
-      width: 132px !important;
+      width: 130px !important;
       padding: 4px 6px !important;
       font-size: 0.78rem !important;
       border-radius: 5px !important;
@@ -508,17 +560,23 @@
     .reagendado-badge {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       background: #16a34a;
       color: #fff;
       font-weight: 700;
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       padding: 2px 7px;
       border-radius: 999px;
     }
 
+    .obs-cell {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
     .obs-input {
-      width: 220px !important;
+      width: 210px !important;
       padding: 5px 8px !important;
       font-size: 0.79rem !important;
       border-radius: 5px !important;
@@ -533,6 +591,27 @@
       font-weight: 600;
     }
 
+    .btn-save-row {
+      background: #0284c7;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 9px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .btn-save-row:hover {
+      background: #0369a1;
+    }
+    .btn-save-row.saved {
+      background: #16a34a;
+    }
+
     .btn-clear-mini {
       background: transparent;
       border: none;
@@ -540,12 +619,22 @@
       cursor: pointer;
       font-size: 0.9rem;
       line-height: 1;
-      padding: 2px 4px;
+      padding: 2px 5px;
       border-radius: 4px;
     }
     .btn-clear-mini:hover {
       color: #dc2626;
       background: #fee2e2;
+    }
+
+    .origin-tag {
+      font-size: 0.68rem;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-weight: 700;
+      margin-left: 4px;
     }
 
     .empty-state {
@@ -580,10 +669,10 @@
     <header class="header">
       <div class="header-title">
         <h1>📦 Detector de Pedidos en Recepción</h1>
-        <p>Corte por defecto <strong>12/11/2026</strong> · Resaltado en <strong style="color:#dc2626">ROJO</strong> para planificadas del <strong>10/11 y 11/11</strong> · Guardado automático de fecha de reagendado y observaciones.</p>
+        <p>Corte <strong>12/11/2026</strong> · Planificadas <strong>10/11 y 11/11 en ROJO</strong> · <strong>Memoria persistente</strong> de pedidos reagendados/editados entre sesiones y nuevos Excels.</p>
       </div>
       <div class="header-actions">
-        <span id="fileStatus" class="file-status">Ningún archivo cargado todavía</span>
+        <span id="fileStatus" class="file-status">Sin Excel cargado en esta sesión</span>
         <button type="button" class="btn btn-outline" id="btnSampleData" title="Carga filas de ejemplo para probar la herramienta">
           🧪 Cargar datos de ejemplo
         </button>
@@ -594,7 +683,7 @@
     <div class="dropzone" id="dropzone">
       <div>
         <div class="dropzone-title">📂 Arrastra aquí tu Excel (<em>pedidos recepción almacen.xlsx / .xls</em>) o haz clic para seleccionarlo</div>
-        <div class="dropzone-sub">Tus fechas de reagendado y observaciones se guardan automáticamente por Nº de Pedido aunque subas un Excel nuevo por la tarde o mañana.</div>
+        <div class="dropzone-sub">Cuando subas un Excel nuevo, los pedidos que ya hayas reagendado o comentado se mantienen guardados automáticamente para futuras consultas.</div>
       </div>
       <div>
         <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none;" />
@@ -609,6 +698,13 @@
       <div class="rules-header">
         <h2>⚙️ Condición de Detección (Preconfigurada al 12 de Noviembre)</h2>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-outline" id="btnExportBackup" style="padding: 5px 10px; font-size: 0.78rem;" title="Descarga una copia de seguridad de tus pedidos reagendados y observaciones">
+            💾 Exportar Historial Editados
+          </button>
+          <input type="file" id="importBackupInput" accept=".json" style="display:none;" />
+          <button type="button" class="btn btn-outline" onclick="document.getElementById('importBackupInput').click()" style="padding: 5px 10px; font-size: 0.78rem;" title="Restaura o importa un historial de pedidos editados desde otro PC">
+            📂 Importar Historial
+          </button>
           <button type="button" class="btn btn-outline" id="btnResetRules" style="padding: 5px 10px; font-size: 0.78rem;">
             Restaurar regla del 12/11
           </button>
@@ -667,7 +763,7 @@
             <option value="all" selected>Todos</option>
             <option value="plan10_11">🔴 Solo Planificada 10/11 o 11/11</option>
             <option value="plan10_11_pending">🔴 10/11 o 11/11 SIN reagendar</option>
-            <option value="reagendados">✅ Ya reagendados (Con fecha)</option>
+            <option value="reagendados">✅ Ya reagendados / Editados</option>
             <option value="sin_reagendar">⏳ Pendientes de reagendar</option>
             <option value="con_obs">📝 Con observaciones</option>
           </select>
@@ -691,31 +787,42 @@
           </select>
         </div>
       </div>
+
+      <!-- Barra para mantener siempre visibles los pedidos reagendados/editados -->
+      <div class="keep-edited-bar">
+        <label class="checkbox-label">
+          <input type="checkbox" id="keepEditedVisible" checked />
+          📌 Mantener siempre en la lista los pedidos que hayamos reagendado o añadido observaciones (aunque en próximos Excels ya tengan la cita cambiada o no salgan)
+        </label>
+        <span id="savedMemoryInfo" style="color: var(--muted); font-size: 0.79rem;">
+          Memoria: 0 pedidos editados guardados
+        </span>
+      </div>
     </section>
 
     <!-- Tarjetas Resumen (KPIs) -->
     <section class="kpi-grid">
-      <div class="kpi-card highlight">
+      <div class="kpi-card highlight" onclick="setQuickView('matched')" title="Haz clic para ver todos los detectados">
         <div class="kpi-label">🚨 Pedidos Detectados</div>
         <div class="kpi-value" id="kpiDetected">0</div>
         <div class="kpi-sub" id="kpiDetectedRule">Previsto &gt; 12/11 y Solic./Planif. &lt; 12/11</div>
       </div>
-      <div class="kpi-card danger-card">
+      <div class="kpi-card danger-card" onclick="setQuickFilter('plan10_11')" title="Haz clic para filtrar los de Planificada 10/11 y 11/11">
         <div class="kpi-label">🔴 Planificada 10/11 y 11/11</div>
         <div class="kpi-value" id="kpiPlan1011">0</div>
         <div class="kpi-sub" id="kpiPlan1011Sub">Marcados en rojo en la tabla</div>
       </div>
-      <div class="kpi-card reagendado-card">
-        <div class="kpi-label">✅ Pedidos Reagendados</div>
+      <div class="kpi-card reagendado-card" onclick="setQuickView('saved_only')" title="Haz clic para consultar todos tus pedidos reagendados/editados guardados">
+        <div class="kpi-label">✅ Guardados / Reagendados</div>
         <div class="kpi-value" id="kpiReagendados">0</div>
-        <div class="kpi-sub" id="kpiReagendadosSub">Con nueva fecha u observación guardada</div>
+        <div class="kpi-sub" id="kpiReagendadosSub">Haz clic para consultar tus editados</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">⚠️ Con Ruptura / Urgente</div>
         <div class="kpi-value" id="kpiCritical">0</div>
         <div class="kpi-sub">De los detectados (Rup=S o Urg=S)</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card" onclick="setQuickView('all')" title="Haz clic para ver todas las filas del Excel">
         <div class="kpi-label">📋 Total Pedidos en Excel</div>
         <div class="kpi-value" id="kpiTotal">0</div>
         <div class="kpi-sub" id="kpiSheetName">Hoja: -</div>
@@ -726,13 +833,17 @@
     <section class="table-card">
       <div class="table-toolbar">
         <div class="toolbar-left">
-          <select id="viewMode" style="width: auto; font-weight: 600;">
-            <option value="matched" selected>🎯 Mostrar SOLO pedidos detectados</option>
+          <select id="viewMode" style="width: auto; font-weight: 700;">
+            <option value="matched" selected>🎯 Mostrar detectados (+ mis reagendados)</option>
+            <option value="saved_only">📌 Consultar SOLO mis pedidos editados / reagendados</option>
             <option value="all">📄 Mostrar TODOS los pedidos del Excel</option>
           </select>
-          <input type="text" id="searchInput" placeholder="🔍 Buscar Nº Pedido, Proveedor, Observación..." style="width: 290px;" />
+          <input type="text" id="searchInput" placeholder="🔍 Buscar Nº Pedido, Proveedor, Observación..." style="width: 280px;" />
         </div>
         <div class="toolbar-right">
+          <button type="button" class="btn btn-blue" id="btnSaveAllVisible" disabled title="Guarda todos los cambios hechos en la tabla para futuras consultas">
+            💾 Guardar todos los editados
+          </button>
           <button type="button" class="btn btn-outline" id="btnCopyOrders" disabled>
             📋 Copiar Nº Pedidos
           </button>
@@ -755,8 +866,8 @@
               <th data-sort="previsto">Previsto Entrega (I)</th>
               <th data-sort="solicitada">Fecha Solicitada (K)</th>
               <th data-sort="planificada">Fecha Planificada (L)</th>
-              <th data-sort="reagendado" class="th-reagendado">📅 Fecha Reagendado</th>
-              <th data-sort="observaciones" class="th-observaciones">📝 Observaciones</th>
+              <th data-sort="reagendado" class="th-reagendado">📅 Fecha Reagendado (Nueva Cita)</th>
+              <th data-sort="observaciones" class="th-observaciones">📝 Observaciones y Guardado</th>
               <th data-sort="ejecucion">Ejecución Pedido</th>
               <th data-sort="solicitudCita">Solicitud Cita</th>
               <th data-sort="expedicion">Nº Expedición</th>
@@ -782,7 +893,9 @@
   <div id="toast" class="toast"></div>
 
   <script>
-    const STORAGE_KEY = "klys_pedidos_annotations_v1";
+    const STORAGE_ANNOTATIONS_KEY = "klys_pedidos_annotations_v2";
+    const STORAGE_OLD_KEY         = "klys_pedidos_annotations_v1";
+    const STORAGE_LAST_TABLE_KEY  = "klys_pedidos_last_table_v2";
 
     // Estado global
     let allRows = [];
@@ -791,10 +904,19 @@
     let currentFileName = "pedidos_recepcion";
     let annotationsMap = loadAnnotations();
 
+    // Cargar diccionario de pedidos editados/reagendados (migra v1 si existía)
     function loadAnnotations() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? JSON.parse(raw) : {};
+        const rawV2 = localStorage.getItem(STORAGE_ANNOTATIONS_KEY);
+        const mapV2 = rawV2 ? JSON.parse(rawV2) : {};
+        const rawV1 = localStorage.getItem(STORAGE_OLD_KEY);
+        if (rawV1) {
+          const mapV1 = JSON.parse(rawV1);
+          Object.keys(mapV1).forEach(ped => {
+            if (!mapV2[ped]) mapV2[ped] = mapV1[ped];
+          });
+        }
+        return mapV2;
       } catch (e) {
         return {};
       }
@@ -802,15 +924,55 @@
 
     function saveAnnotations() {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(annotationsMap));
+        localStorage.setItem(STORAGE_ANNOTATIONS_KEY, JSON.stringify(annotationsMap));
+        updateMemoryStatusText();
       } catch (e) {
         console.error("No se pudo guardar en localStorage:", e);
       }
     }
 
+    // Guardar la última tabla de Excel cargada para que al abrir/refrescar la página no salga vacía
+    function saveLastTableSession(rows, fileName, sheetName) {
+      try {
+        const payload = {
+          fileName: fileName || "pedidos_recepcion",
+          sheetName: sheetName || "Export",
+          savedAt: new Date().toLocaleString("es-ES"),
+          rows: rows
+        };
+        localStorage.setItem(STORAGE_LAST_TABLE_KEY, JSON.stringify(payload));
+      } catch (e) {
+        console.warn("Tabla demasiado grande para caché completa, se mantienen los editados:", e);
+      }
+    }
+
+    function loadLastTableSession() {
+      try {
+        const raw = localStorage.getItem(STORAGE_LAST_TABLE_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function updateMemoryStatusText() {
+      const count = Object.keys(annotationsMap).length;
+      const el = document.getElementById("savedMemoryInfo");
+      if (el) {
+        el.innerHTML = count > 0
+          ? `✅ <strong>${count} pedido(s) editado(s)</strong> guardados en memoria para futuras consultas`
+          : `Memoria: 0 pedidos editados guardados`;
+      }
+    }
+
     function getOrderAnnotation(pedido) {
-      if (!pedido) return { reagendado: "", obs: "" };
-      return annotationsMap[pedido] || { reagendado: "", obs: "" };
+      if (!pedido) return { reagendado: "", obs: "", snapshot: null, updatedAt: "" };
+      return annotationsMap[pedido] || { reagendado: "", obs: "", snapshot: null, updatedAt: "" };
+    }
+
+    function findRowByPedido(pedido) {
+      return allRows.find(r => r.pedido === pedido) || (annotationsMap[pedido] && annotationsMap[pedido].snapshot) || null;
     }
 
     function formatIsoToDisplay(isoStr) {
@@ -820,40 +982,122 @@
       return `${parts[2]}/${parts[1]}/${parts[0]}`;
     }
 
-    // Actualizar fecha de reagendado de un pedido
-    window.onReagendadoChange = function(pedido, isoDateVal) {
+    function displayToIso(dmyStr) {
+      if (!dmyStr) return "";
+      const m = String(dmyStr).trim().match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+      if (m) {
+        return `${m[3]}-${String(m[2]).padStart(2, "0")}-${String(m[1]).padStart(2, "0")}`;
+      }
+      if (/^\d{4}-\d{2}-\d{2}$/.test(String(dmyStr).trim())) {
+        return String(dmyStr).trim();
+      }
+      return "";
+    }
+
+    // Guardar un pedido editado (incluyendo copia completa de sus datos para futuras consultas)
+    function persistOrderEdit(pedido, newReagendadoIso, newObsText, showNotification = true) {
       if (!pedido) return;
-      const current = annotationsMap[pedido] || { reagendado: "", obs: "" };
-      current.reagendado = isoDateVal || "";
-      if (!current.reagendado && !current.obs) {
+      const existing = annotationsMap[pedido] || { reagendado: "", obs: "", snapshot: null, updatedAt: "" };
+      const rowInTable = findRowByPedido(pedido);
+
+      const reagendadoVal = newReagendadoIso !== undefined ? newReagendadoIso : (existing.reagendado || "");
+      const obsVal = newObsText !== undefined ? newObsText : (existing.obs || "");
+
+      if (!reagendadoVal && !obsVal.trim()) {
         delete annotationsMap[pedido];
-      } else {
-        annotationsMap[pedido] = current;
+        saveAnnotations();
+        if (showNotification) showToast(`🗑️ Datos editados eliminados del pedido ${pedido}`);
+        return;
       }
+
+      // Guardamos también la foto completa del pedido (snapshot) para que nunca se pierda aunque el próximo Excel no lo traiga o cambie sus fechas
+      const snapshot = rowInTable ? {
+        almacen: rowInTable.almacen || "",
+        sec: rowInTable.sec || "",
+        tipo: rowInTable.tipo || "",
+        pedido: pedido,
+        urgente: rowInTable.urgente || "",
+        ruptura: rowInTable.ruptura || "",
+        proveedor: rowInTable.proveedor || "",
+        ejecucion: rowInTable.ejecucion || "",
+        ejecucionInt: rowInTable.ejecucionInt || 0,
+        previsto: rowInTable.previsto || "",
+        previstoObj: rowInTable.previstoObj || null,
+        previstoInt: rowInTable.previstoInt || 0,
+        solicitudCita: rowInTable.solicitudCita || "",
+        solicitudCitaInt: rowInTable.solicitudCitaInt || 0,
+        solicitada: rowInTable.solicitada || "",
+        solicitadaObj: rowInTable.solicitadaObj || null,
+        solicitadaInt: rowInTable.solicitadaInt || 0,
+        planificada: (existing.snapshot && existing.snapshot.planificadaOriginal) || rowInTable.planificada || "",
+        planificadaOriginal: (existing.snapshot && existing.snapshot.planificadaOriginal) || rowInTable.planificada || "",
+        planificadaObj: rowInTable.planificadaObj || null,
+        planificadaInt: rowInTable.planificadaInt || 0,
+        isPlan1011: Boolean(rowInTable.isPlan1011 || (existing.snapshot && existing.snapshot.isPlan1011)),
+        expedicion: rowInTable.expedicion || "",
+        agencia: rowInTable.agencia || "",
+        paq: rowInTable.paq ?? "",
+        pal: rowInTable.pal ?? "",
+        recepcion: rowInTable.recepcion || "",
+        valoracion: rowInTable.valoracion || ""
+      } : existing.snapshot;
+
+      annotationsMap[pedido] = {
+        reagendado: reagendadoVal,
+        obs: obsVal,
+        updatedAt: new Date().toLocaleString("es-ES", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }),
+        snapshot: snapshot
+      };
+
       saveAnnotations();
-      applyFiltersAndRender(false);
-      if (isoDateVal) {
-        showToast(`📅 Pedido ${pedido} reagendado al ${formatIsoToDisplay(isoDateVal)}`);
-      } else {
-        showToast(`Fecha de reagendado borrada en pedido ${pedido}`);
+      if (showNotification) {
+        const infoDate = reagendadoVal ? ` (Nueva cita: ${formatIsoToDisplay(reagendadoVal)})` : "";
+        showToast(`💾 Pedido ${pedido} guardado para futuras consultas${infoDate}`);
       }
+    }
+
+    // Eventos desde las celdas de la tabla
+    window.onReagendadoChange = function(pedido, isoDateVal) {
+      const obsInput = document.getElementById(`obs_${pedido}`);
+      const currentObs = obsInput ? obsInput.value : undefined;
+      persistOrderEdit(pedido, isoDateVal || "", currentObs, true);
+      applyFiltersAndRender();
     };
 
-    // Actualizar observaciones de un pedido en tiempo real
     window.onObsInput = function(pedido, textVal, inputEl) {
-      if (!pedido) return;
-      const current = annotationsMap[pedido] || { reagendado: "", obs: "" };
-      current.obs = textVal || "";
-      if (!current.reagendado && !current.obs) {
-        delete annotationsMap[pedido];
-      } else {
-        annotationsMap[pedido] = current;
-      }
-      saveAnnotations();
+      const dateInput = document.getElementById(`reag_${pedido}`);
+      const currentReag = dateInput ? dateInput.value : undefined;
+      persistOrderEdit(pedido, currentReag, textVal || "", false);
       if (inputEl) {
         inputEl.classList.toggle("has-obs", Boolean(textVal && textVal.trim()));
       }
+      const btn = document.getElementById(`btnsave_${pedido}`);
+      if (btn) {
+        btn.textContent = "💾 Guardar";
+        btn.classList.remove("saved");
+      }
       updateKpiCountersOnly();
+    };
+
+    window.onExplicitSaveRow = function(pedido) {
+      const dateInput = document.getElementById(`reag_${pedido}`);
+      const obsInput = document.getElementById(`obs_${pedido}`);
+      const reagVal = dateInput ? dateInput.value : "";
+      const obsVal = obsInput ? obsInput.value : "";
+      persistOrderEdit(pedido, reagVal, obsVal, true);
+      applyFiltersAndRender();
+    };
+
+    window.setQuickView = function(mode) {
+      document.getElementById("viewMode").value = mode;
+      document.getElementById("filterSpecial").value = "all";
+      applyFiltersAndRender();
+    };
+
+    window.setQuickFilter = function(specialVal) {
+      document.getElementById("viewMode").value = "matched";
+      document.getElementById("filterSpecial").value = specialVal;
+      applyFiltersAndRender();
     };
 
     // Utilidad para mostrar avisos rápidos
@@ -861,7 +1105,7 @@
       const t = document.getElementById("toast");
       t.textContent = msg;
       t.classList.add("show");
-      setTimeout(() => t.classList.remove("show"), 2600);
+      setTimeout(() => t.classList.remove("show"), 2800);
     }
 
     // Normalizar texto de cabecera
@@ -930,10 +1174,9 @@
       return null;
     }
 
-    // Comprobar si la Fecha Planificada es 10/11 o 11/11
     function isPlanificada10or11Nov(planObj) {
       if (!planObj) return false;
-      const md = planObj.int % 10000; // MMDD
+      const md = planObj.int % 10000;
       return md === 1110 || md === 1111;
     }
 
@@ -1009,6 +1252,10 @@
       const idxRecepcion     = findCol(["1ª recepcion", "1a recepcion", "recepcion"], 16);
       const idxValoracion    = findCol(["fecha valoracion", "valoracion"], 17);
 
+      // Si el usuario sube un Excel previamente exportado desde esta herramienta, recuperar automáticamente sus columnas de Reagendado y Observaciones
+      const idxReagendadoImport = findCol(["fecha reagendado", "reagendado"], -1);
+      const idxObsImport        = findCol(["observaciones", "observacion"], -1);
+
       const parsed = [];
       for (let r = headerRowIndex + 1; r < matrix.length; r++) {
         const row = matrix[r];
@@ -1026,7 +1273,7 @@
         const recepcionObj   = parseExcelDate(row[idxRecepcion]);
         const valoracionObj  = parseExcelDate(row[idxValoracion]);
 
-        parsed.push({
+        const rowObj = {
           almacen: row[idxAlmacen] ?? "",
           sec: row[idxSec] !== undefined ? String(row[idxSec]).trim() : "",
           tipo: row[idxTipo] !== undefined ? String(row[idxTipo]).trim() : "",
@@ -1054,9 +1301,33 @@
           pal: row[idxPal] ?? "",
           recepcion: recepcionObj ? recepcionObj.display : (row[idxRecepcion] !== undefined ? String(row[idxRecepcion]).trim() : ""),
           valoracion: valoracionObj ? valoracionObj.display : (row[idxValoracion] !== undefined ? String(row[idxValoracion]).trim() : "")
-        });
+        };
+
+        // Si el Excel subido traía Fecha Reagendado u Observaciones, guardarlas también en memoria
+        const importedReag = idxReagendadoImport >= 0 ? displayToIso(row[idxReagendadoImport]) : "";
+        const importedObs  = idxObsImport >= 0 ? String(row[idxObsImport] || "").trim() : "";
+        if (pedidoVal && (importedReag || importedObs)) {
+          const existing = annotationsMap[pedidoVal] || {};
+          annotationsMap[pedidoVal] = {
+            reagendado: importedReag || existing.reagendado || "",
+            obs: importedObs || existing.obs || "",
+            updatedAt: existing.updatedAt || new Date().toLocaleString("es-ES", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }),
+            snapshot: rowObj
+          };
+        } else if (pedidoVal && annotationsMap[pedidoVal]) {
+          // Actualizar snapshot con los datos más recientes manteniendo la fecha planificada original si era del 10/11 o 11/11
+          const prevSnap = annotationsMap[pedidoVal].snapshot || {};
+          annotationsMap[pedidoVal].snapshot = {
+            ...rowObj,
+            planificadaOriginal: prevSnap.planificadaOriginal || prevSnap.planificada || rowObj.planificada,
+            isPlan1011: Boolean(rowObj.isPlan1011 || prevSnap.isPlan1011)
+          };
+        }
+
+        parsed.push(rowObj);
       }
 
+      saveAnnotations();
       document.getElementById("kpiSheetName").textContent = `Hoja: ${sheetName || "Export"}`;
       populateSecDropdown(parsed);
       return parsed;
@@ -1076,6 +1347,24 @@
       if (secs.includes(currentVal)) sel.value = currentVal;
     }
 
+    // Construir lista combinada: filas del Excel actual + pedidos editados guardados que ya no estén en el Excel
+    function buildCombinedRows() {
+      const inExcelSet = new Set(allRows.map(r => r.pedido));
+      const combined = [...allRows];
+
+      Object.keys(annotationsMap).forEach(ped => {
+        const ann = annotationsMap[ped];
+        if (!inExcelSet.has(ped) && ann && ann.snapshot && (ann.reagendado || (ann.obs && ann.obs.trim()))) {
+          combined.push({
+            ...ann.snapshot,
+            fromMemoryOnly: true
+          });
+        }
+      });
+
+      return combined;
+    }
+
     function updateKpiCountersOnly() {
       const cutoffInt = getCutoffInt();
       const opPrevisto = document.getElementById("opPrevisto").value;
@@ -1083,15 +1372,22 @@
       const opPlanificada = document.getElementById("opPlanificada").value;
       const filterRecepcion = document.getElementById("filterRecepcion").value;
       const filterSec = document.getElementById("filterSec").value;
+      const keepEdited = document.getElementById("keepEditedVisible").checked;
 
       let detectedCount = 0;
       let criticalCount = 0;
       let plan1011Count = 0;
       let plan1011Reagendados = 0;
-      let reagendadosCount = 0;
+      const savedTotalCount = Object.keys(annotationsMap).filter(k => {
+        const a = annotationsMap[k];
+        return a && (a.reagendado || (a.obs && a.obs.trim()));
+      }).length;
 
-      allRows.forEach(row => {
+      const combined = buildCombinedRows();
+
+      combined.forEach(row => {
         const ann = getOrderAnnotation(row.pedido);
+        const hasEdit = Boolean(ann.reagendado || (ann.obs && ann.obs.trim()));
         const okPrevisto = checkDateRule(row.previstoObj, opPrevisto, cutoffInt);
         const okSolicitada = checkDateRule(row.solicitadaObj, opSolicitada, cutoffInt);
         const okPlanificada = checkDateRule(row.planificadaObj, opPlanificada, cutoffInt);
@@ -1101,15 +1397,17 @@
           Boolean(row.recepcion);
         const okSec = filterSec === "all" ? true : row.sec === filterSec;
 
-        const isMatched = okPrevisto && okSolicitada && okPlanificada && okRecep && okSec;
-        if (isMatched) {
+        const matchesRule = okPrevisto && okSolicitada && okPlanificada && okRecep && okSec;
+        const isShownAsDetected = matchesRule || (keepEdited && hasEdit && okSec);
+
+        if (isShownAsDetected) {
           detectedCount++;
           if (row.ruptura === "S" || row.urgente === "S") criticalCount++;
-          if (row.isPlan1011) {
+          const was1011 = Boolean(row.isPlan1011 || (ann.snapshot && ann.snapshot.isPlan1011));
+          if (was1011) {
             plan1011Count++;
             if (ann.reagendado) plan1011Reagendados++;
           }
-          if (ann.reagendado) reagendadosCount++;
         }
       });
 
@@ -1121,7 +1419,8 @@
         plan1011Count > 0
           ? `${plan1011Count - plan1011Reagendados} pendientes · ${plan1011Reagendados} reagendados`
           : `Marcados en rojo en la tabla`;
-      document.getElementById("kpiReagendados").textContent = reagendadosCount;
+      document.getElementById("kpiReagendados").textContent = savedTotalCount;
+      updateMemoryStatusText();
     }
 
     // Aplicar las reglas y actualizar tabla y KPIs
@@ -1135,13 +1434,17 @@
       const filterRecepcion = document.getElementById("filterRecepcion").value;
       const filterSec = document.getElementById("filterSec").value;
       const viewMode = document.getElementById("viewMode").value;
+      const keepEdited = document.getElementById("keepEditedVisible").checked;
       const search = document.getElementById("searchInput").value.trim().toLowerCase();
 
       document.getElementById("kpiDetectedRule").textContent =
         `Corte: ${cutoffStr} · Previsto (${opPrevisto.toUpperCase()}) / Solic. (${opSolicitada.toUpperCase()}) / Planif. (${opPlanificada.toUpperCase()})`;
 
-      const evaluated = allRows.map(row => {
+      const combined = buildCombinedRows();
+
+      const evaluated = combined.map(row => {
         const ann = getOrderAnnotation(row.pedido);
+        const hasEdit = Boolean(ann.reagendado || (ann.obs && ann.obs.trim()));
         const okPrevisto = checkDateRule(row.previstoObj, opPrevisto, cutoffInt);
         const okSolicitada = checkDateRule(row.solicitadaObj, opSolicitada, cutoffInt);
         const okPlanificada = checkDateRule(row.planificadaObj, opPlanificada, cutoffInt);
@@ -1153,14 +1456,22 @@
 
         const okSec = filterSec === "all" ? true : row.sec === filterSec;
 
-        const isMatched = okPrevisto && okSolicitada && okPlanificada && okRecep && okSec;
+        const matchesRule = !row.fromMemoryOnly && okPrevisto && okSolicitada && okPlanificada && okRecep && okSec;
+        const isMatched = matchesRule || (keepEdited && hasEdit && okSec);
+        const isPlan1011Effective = Boolean(row.isPlan1011 || (ann.snapshot && ann.snapshot.isPlan1011));
+        const planificadaOriginal = (ann.snapshot && ann.snapshot.planificadaOriginal) || row.planificada;
 
         return {
           ...row,
+          matchesRule,
           isMatched,
+          hasEdit,
+          isPlan1011: isPlan1011Effective,
+          planificadaOriginal,
           reagendado: ann.reagendado || "",
           reagendadoDisplay: formatIsoToDisplay(ann.reagendado || ""),
-          observaciones: ann.obs || ""
+          observaciones: ann.obs || "",
+          updatedAt: ann.updatedAt || ""
         };
       });
 
@@ -1168,12 +1479,15 @@
 
       // Filtrar para la vista de la tabla
       filteredRows = evaluated.filter(r => {
+        if (viewMode === "saved_only" && !r.hasEdit) return false;
         if (viewMode === "matched" && !r.isMatched) return false;
+        if (viewMode === "all" && r.fromMemoryOnly && !keepEdited) return false;
+
         if (filterSec !== "all" && r.sec !== filterSec) return false;
 
         if (filterSpecial === "plan10_11" && !r.isPlan1011) return false;
         if (filterSpecial === "plan10_11_pending" && (!r.isPlan1011 || r.reagendado)) return false;
-        if (filterSpecial === "reagendados" && !r.reagendado) return false;
+        if (filterSpecial === "reagendados" && !r.hasEdit) return false;
         if (filterSpecial === "sin_reagendar" && r.reagendado) return false;
         if (filterSpecial === "con_obs" && !r.observaciones.trim()) return false;
 
@@ -1204,6 +1518,7 @@
       renderTable(filteredRows, cutoffInt);
 
       const hasExportable = filteredRows.length > 0;
+      document.getElementById("btnSaveAllVisible").disabled = !hasExportable;
       document.getElementById("btnCopyOrders").disabled = !hasExportable;
       document.getElementById("btnExportExcel").disabled = !hasExportable;
     }
@@ -1218,7 +1533,9 @@
 
     function renderTable(rows, cutoffInt) {
       const tbody = document.getElementById("tableBody");
-      if (allRows.length === 0) {
+      const savedCount = Object.keys(annotationsMap).length;
+
+      if (allRows.length === 0 && savedCount === 0) {
         tbody.innerHTML = `
           <tr>
             <td colspan="19" class="empty-state">
@@ -1232,8 +1549,8 @@
         tbody.innerHTML = `
           <tr>
             <td colspan="19" class="empty-state">
-              No se han encontrado pedidos que cumplan las condiciones actuales con este filtro.
-              <br/><span style="font-size:0.8rem;">Puedes cambiar el selector superior a "📄 Mostrar TODOS los pedidos del Excel" para revisar todas las filas.</span>
+              No se han encontrado pedidos con el filtro actual.
+              <br/><span style="font-size:0.8rem;">Puedes cambiar el selector superior a "📌 Consultar SOLO mis pedidos editados / reagendados" o "📄 Mostrar TODOS".</span>
             </td>
           </tr>`;
         return;
@@ -1245,11 +1562,15 @@
 
         // Si la Fecha Planificada es 10/11 o 11/11 -> marcar en ROJO
         let planHtml = "";
+        const changedPlanInfo = (r.planificadaOriginal && r.planificadaOriginal !== r.planificada)
+          ? ` <span class="origin-tag" title="Fecha planificada que tenía antes de reagendar">Orig: ${r.planificadaOriginal}</span>`
+          : "";
+
         if (r.isPlan1011) {
-          planHtml = `<span class="date-plan-red" title="Alerta: Fecha Planificada 10/11 o 11/11">🚨 ${r.planificada}</span>`;
+          planHtml = `<span class="date-plan-red" title="Alerta: Fecha Planificada 10/11 o 11/11">🚨 ${r.planificada || r.planificadaOriginal}</span>${changedPlanInfo}`;
         } else {
           const planClass = r.planificadaObj && r.planificadaObj.int < cutoffInt ? "date-early" : "";
-          planHtml = `<span class="${planClass}">${r.planificada || "-"}</span>`;
+          planHtml = `<span class="${planClass}">${r.planificada || "-"}</span>${changedPlanInfo}`;
         }
 
         const urgBadge = r.urgente === "S"
@@ -1267,17 +1588,20 @@
         const rowClasses = [
           r.isMatched ? "row-matched" : "",
           r.isPlan1011 ? "row-plan-red" : "",
-          r.reagendado ? "row-reagendado" : ""
+          r.hasEdit ? "row-reagendado" : ""
         ].filter(Boolean).join(" ");
 
         const safePedido = escapeHtml(r.pedido);
         const safeObs = escapeHtml(r.observaciones);
+        const memoryBadge = r.fromMemoryOnly
+          ? `<span class="origin-tag" title="Guardado de un Excel anterior">📌 Guardado</span>`
+          : (!r.matchesRule && r.hasEdit ? `<span class="origin-tag" title="Mantenido en lista por estar reagendado/editado">📌 Editado</span>` : "");
 
         return `
           <tr class="${rowClasses}">
             <td><strong>${r.sec}</strong></td>
             <td>${r.tipo}</td>
-            <td><strong>${r.pedido}</strong></td>
+            <td><strong>${r.pedido}</strong>${memoryBadge}</td>
             <td>${urgBadge}</td>
             <td>${rupBadge}</td>
             <td>${r.proveedor}</td>
@@ -1288,25 +1612,41 @@
               <div class="reagendado-cell">
                 <input
                   type="date"
+                  id="reag_${safePedido}"
                   class="reagendado-input ${r.reagendado ? "has-date" : ""}"
                   value="${r.reagendado}"
                   onchange="onReagendadoChange('${safePedido}', this.value)"
-                  title="Selecciona la fecha en que se ha reagendado este pedido"
+                  title="Selecciona la nueva fecha de cita reagendada"
                 />
                 ${r.reagendado
-                  ? `<span class="reagendado-badge" title="Reagendado al ${r.reagendadoDisplay}">✅ ${r.reagendadoDisplay}</span>
-                     <button type="button" class="btn-clear-mini" onclick="onReagendadoChange('${safePedido}', '')" title="Borrar fecha reagendado">✕</button>`
+                  ? `<span class="reagendado-badge" title="Cita reagendada al ${r.reagendadoDisplay}">✅ ${r.reagendadoDisplay}</span>`
                   : ""}
               </div>
             </td>
             <td>
-              <input
-                type="text"
-                class="obs-input ${r.observaciones.trim() ? "has-obs" : ""}"
-                placeholder="Escribir observación..."
-                value="${safeObs}"
-                oninput="onObsInput('${safePedido}', this.value, this)"
-              />
+              <div class="obs-cell">
+                <input
+                  type="text"
+                  id="obs_${safePedido}"
+                  class="obs-input ${r.observaciones.trim() ? "has-obs" : ""}"
+                  placeholder="Añadir observación..."
+                  value="${safeObs}"
+                  oninput="onObsInput('${safePedido}', this.value, this)"
+                  onkeydown="if(event.key==='Enter'){onExplicitSaveRow('${safePedido}');}"
+                />
+                <button
+                  type="button"
+                  id="btnsave_${safePedido}"
+                  class="btn-save-row ${r.hasEdit ? "saved" : ""}"
+                  onclick="onExplicitSaveRow('${safePedido}')"
+                  title="${r.updatedAt ? "Guardado el " + r.updatedAt : "Guardar cita y observación para futuras consultas"}"
+                >
+                  ${r.hasEdit ? "✅ Guardado" : "💾 Guardar"}
+                </button>
+                ${r.hasEdit
+                  ? `<button type="button" class="btn-clear-mini" onclick="persistOrderEdit('${safePedido}', '', '', true); applyFiltersAndRender();" title="Borrar reagendado y observación de este pedido">✕</button>`
+                  : ""}
+              </div>
             </td>
             <td>${r.ejecucion}</td>
             <td>${r.solicitudCita}</td>
@@ -1319,6 +1659,59 @@
           </tr>
         `;
       }).join("");
+    }
+
+    // Guardar explícitamente todas las filas visibles que tengan algún dato escrito en los inputs
+    function saveAllVisibleEdits() {
+      let count = 0;
+      filteredRows.forEach(r => {
+        const dEl = document.getElementById(`reag_${r.pedido}`);
+        const oEl = document.getElementById(`obs_${r.pedido}`);
+        const dVal = dEl ? dEl.value : r.reagendado;
+        const oVal = oEl ? oEl.value : r.observaciones;
+        if (dVal || (oVal && oVal.trim())) {
+          persistOrderEdit(r.pedido, dVal, oVal, false);
+          count++;
+        }
+      });
+      applyFiltersAndRender();
+      showToast(`✅ ${count} pedido(s) reagendado(s)/editado(s) guardados en memoria`);
+    }
+
+    // Exportar e importar historial JSON por si cambia de ordenador
+    function exportAnnotationsBackup() {
+      const count = Object.keys(annotationsMap).length;
+      if (count === 0) {
+        alert("Todavía no tienes ningún pedido reagendado o con observaciones guardado.");
+        return;
+      }
+      const blob = new Blob([JSON.stringify(annotationsMap, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `historial_pedidos_reagendados_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast(`💾 Historial de ${count} pedidos exportado`);
+    }
+
+    function importAnnotationsBackup(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (typeof imported === "object" && imported !== null) {
+            annotationsMap = { ...annotationsMap, ...imported };
+            saveAnnotations();
+            applyFiltersAndRender();
+            showToast(`✅ Historial importado correctamente (${Object.keys(annotationsMap).length} pedidos en memoria)`);
+          }
+        } catch (err) {
+          alert("El archivo seleccionado no es un historial válido (.json).");
+        }
+      };
+      reader.readAsText(file);
     }
 
     // Leer el archivo subido con SheetJS
@@ -1341,8 +1734,9 @@
           document.getElementById("fileStatus").textContent = `✅ ${file.name} (${allRows.length} pedidos · cargado a las ${nowStr})`;
           document.getElementById("dropzone").classList.add("compact");
 
+          saveLastTableSession(allRows, currentFileName, targetSheet);
           applyFiltersAndRender();
-          showToast(`Archivo cargado: ${allRows.length} pedidos leídos`);
+          showToast(`Archivo cargado: ${allRows.length} pedidos (${Object.keys(annotationsMap).length} editados conservados)`);
         } catch (err) {
           console.error(err);
           alert("Error al leer el archivo Excel. Asegúrate de que sea un archivo .xlsx, .xls o .csv válido.");
@@ -1366,9 +1760,11 @@
         "Previsto Entrega": r.previsto,
         "Fecha Solicitada": r.solicitada,
         "Fecha Planificada": r.planificada,
+        "Planificada Original": r.planificadaOriginal || r.planificada,
         "Alerta 10-11/11": r.isPlan1011 ? "ROJO (10/11 o 11/11)" : "",
         "Fecha Reagendado": r.reagendadoDisplay,
         "Observaciones": r.observaciones,
+        "Guardado el": r.updatedAt,
         "Ejecución Pedido": r.ejecucion,
         "Solicitud de Cita": r.solicitudCita,
         "Nº Expedición": r.expedicion,
@@ -1387,7 +1783,6 @@
       showToast("Excel descargado con fechas de reagendado y observaciones");
     }
 
-    // Copiar números de pedido al portapapeles
     function copyOrderNumbers() {
       if (!filteredRows.length) return;
       const list = filteredRows.map(r => r.pedido).filter(Boolean).join("\n");
@@ -1396,7 +1791,6 @@
       });
     }
 
-    // Datos de prueba reales incluyendo casos con planificada 10/11 y 11/11
     function loadSampleData() {
       const sampleMatrix = [
         ["Código Almacén", "Sec", "T", "Nº Pedido", "Urgente", "Ruptura", "Proveedor", "Ejecución Pedido", "Previsto Entrega", "Solicitud de Cita", "Fecha Solicitada", "Fecha Planificada", "Nº Expedición", "Agencia", "Paq", "Pal", "1ª Recepción", "Fecha Valoración"],
@@ -1410,6 +1804,7 @@
       allRows = parseSheetMatrix(sampleMatrix, "Export (Ejemplo)");
       document.getElementById("fileStatus").textContent = `🧪 Datos de ejemplo cargados (${allRows.length} pedidos)`;
       document.getElementById("dropzone").classList.add("compact");
+      saveLastTableSession(allRows, currentFileName, "Export (Ejemplo)");
       applyFiltersAndRender();
       showToast("Datos de ejemplo cargados (incluye pedidos del 10/11 y 11/11 en rojo)");
     }
@@ -1438,7 +1833,7 @@
       }
     });
 
-    ["cutoffDate", "opPrevisto", "opSolicitada", "opPlanificada", "filterSpecial", "filterRecepcion", "filterSec", "viewMode"].forEach(id => {
+    ["cutoffDate", "opPrevisto", "opSolicitada", "opPlanificada", "filterSpecial", "filterRecepcion", "filterSec", "viewMode", "keepEditedVisible"].forEach(id => {
       document.getElementById(id).addEventListener("change", applyFiltersAndRender);
     });
 
@@ -1457,8 +1852,13 @@
     });
 
     document.getElementById("btnSampleData").addEventListener("click", loadSampleData);
+    document.getElementById("btnSaveAllVisible").addEventListener("click", saveAllVisibleEdits);
     document.getElementById("btnExportExcel").addEventListener("click", exportFilteredToExcel);
     document.getElementById("btnCopyOrders").addEventListener("click", copyOrderNumbers);
+    document.getElementById("btnExportBackup").addEventListener("click", exportAnnotationsBackup);
+    document.getElementById("importBackupInput").addEventListener("change", e => {
+      if (e.target.files && e.target.files[0]) importAnnotationsBackup(e.target.files[0]);
+    });
 
     // Ordenación por columnas al hacer clic en la cabecera
     document.querySelectorAll("#ordersTable thead th[data-sort]").forEach(th => {
@@ -1473,6 +1873,22 @@
         applyFiltersAndRender();
       });
     });
+
+    // Al abrir la página, restaurar automáticamente el último Excel cargado y todos los pedidos editados
+    (function initOnLoad() {
+      updateMemoryStatusText();
+      const lastSession = loadLastTableSession();
+      if (lastSession && Array.isArray(lastSession.rows) && lastSession.rows.length > 0) {
+        allRows = lastSession.rows;
+        currentFileName = lastSession.fileName || "pedidos_recepcion";
+        document.getElementById("fileStatus").textContent =
+          `🔄 Restaurado último Excel: ${currentFileName} (${allRows.length} pedidos · ${lastSession.savedAt})`;
+        document.getElementById("kpiSheetName").textContent = `Hoja: ${lastSession.sheetName || "Export"}`;
+        document.getElementById("dropzone").classList.add("compact");
+        populateSecDropdown(allRows);
+      }
+      applyFiltersAndRender();
+    })();
   </script>
 </body>
 </html>

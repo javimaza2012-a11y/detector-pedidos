@@ -87,6 +87,31 @@
       flex-wrap: wrap;
     }
 
+    .cloud-badge {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 6px 11px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #475569;
+    }
+
+    .cloud-badge.online {
+      background: #dcfce7;
+      border-color: #86efac;
+      color: #15803d;
+    }
+
+    .cloud-badge.syncing {
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+      color: #0369a1;
+    }
+
     .file-status {
       font-size: 0.82rem;
       color: var(--muted);
@@ -669,10 +694,11 @@
     <header class="header">
       <div class="header-title">
         <h1>📦 Detector de Pedidos en Recepción</h1>
-        <p>Corte <strong>12/11/2026</strong> · Planificadas <strong>10/11 y 11/11 en ROJO</strong> · <strong>Memoria persistente</strong> de pedidos reagendados/editados entre sesiones y nuevos Excels.</p>
+        <p>Corte <strong>12/11/2026</strong> · Planificadas <strong>10/11 y 11/11 en ROJO</strong> · <strong>Sincronización en la Nube en tiempo real</strong> para todo el equipo.</p>
       </div>
       <div class="header-actions">
-        <span id="fileStatus" class="file-status">Sin Excel cargado en esta sesión</span>
+        <span id="cloudStatus" class="cloud-badge syncing">☁️ Conectando a la nube...</span>
+        <span id="fileStatus" class="file-status">Cargando datos compartidos...</span>
         <button type="button" class="btn btn-outline" id="btnSampleData" title="Carga filas de ejemplo para probar la herramienta">
           🧪 Cargar datos de ejemplo
         </button>
@@ -683,7 +709,7 @@
     <div class="dropzone" id="dropzone">
       <div>
         <div class="dropzone-title">📂 Arrastra aquí tu Excel (<em>pedidos recepción almacen.xlsx / .xls</em>) o haz clic para seleccionarlo</div>
-        <div class="dropzone-sub">Cuando subas un Excel nuevo, los pedidos que ya hayas reagendado o comentado se mantienen guardados automáticamente para futuras consultas.</div>
+        <div class="dropzone-sub">Al subir un Excel o guardar una cita reagendada/observación, se comparte automáticamente en la nube con cualquier persona que abra este enlace.</div>
       </div>
       <div>
         <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none;" />
@@ -698,11 +724,11 @@
       <div class="rules-header">
         <h2>⚙️ Condición de Detección (Preconfigurada al 12 de Noviembre)</h2>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button type="button" class="btn btn-outline" id="btnExportBackup" style="padding: 5px 10px; font-size: 0.78rem;" title="Descarga una copia de seguridad de tus pedidos reagendados y observaciones">
+          <button type="button" class="btn btn-outline" id="btnExportBackup" style="padding: 5px 10px; font-size: 0.78rem;" title="Descarga una copia de seguridad de los pedidos reagendados y observaciones">
             💾 Exportar Historial Editados
           </button>
           <input type="file" id="importBackupInput" accept=".json" style="display:none;" />
-          <button type="button" class="btn btn-outline" onclick="document.getElementById('importBackupInput').click()" style="padding: 5px 10px; font-size: 0.78rem;" title="Restaura o importa un historial de pedidos editados desde otro PC">
+          <button type="button" class="btn btn-outline" onclick="document.getElementById('importBackupInput').click()" style="padding: 5px 10px; font-size: 0.78rem;" title="Importa un historial de pedidos editados">
             📂 Importar Historial
           </button>
           <button type="button" class="btn btn-outline" id="btnResetRules" style="padding: 5px 10px; font-size: 0.78rem;">
@@ -792,10 +818,10 @@
       <div class="keep-edited-bar">
         <label class="checkbox-label">
           <input type="checkbox" id="keepEditedVisible" checked />
-          📌 Mantener siempre en la lista los pedidos que hayamos reagendado o añadido observaciones (aunque en próximos Excels ya tengan la cita cambiada o no salgan)
+          📌 Mantener siempre en la lista los pedidos reagendados o con observaciones (visibles para todos aunque en próximos Excels ya tengan la cita cambiada)
         </label>
         <span id="savedMemoryInfo" style="color: var(--muted); font-size: 0.79rem;">
-          Memoria: 0 pedidos editados guardados
+          Nube compartida: 0 pedidos editados guardados
         </span>
       </div>
     </section>
@@ -812,10 +838,10 @@
         <div class="kpi-value" id="kpiPlan1011">0</div>
         <div class="kpi-sub" id="kpiPlan1011Sub">Marcados en rojo en la tabla</div>
       </div>
-      <div class="kpi-card reagendado-card" onclick="setQuickView('saved_only')" title="Haz clic para consultar todos tus pedidos reagendados/editados guardados">
+      <div class="kpi-card reagendado-card" onclick="setQuickView('saved_only')" title="Haz clic para consultar todos los pedidos reagendados/editados compartidos">
         <div class="kpi-label">✅ Guardados / Reagendados</div>
         <div class="kpi-value" id="kpiReagendados">0</div>
-        <div class="kpi-sub" id="kpiReagendadosSub">Haz clic para consultar tus editados</div>
+        <div class="kpi-sub" id="kpiReagendadosSub">Compartidos en la nube (clic para ver)</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">⚠️ Con Ruptura / Urgente</div>
@@ -834,15 +860,15 @@
       <div class="table-toolbar">
         <div class="toolbar-left">
           <select id="viewMode" style="width: auto; font-weight: 700;">
-            <option value="matched" selected>🎯 Mostrar detectados (+ mis reagendados)</option>
-            <option value="saved_only">📌 Consultar SOLO mis pedidos editados / reagendados</option>
+            <option value="matched" selected>🎯 Mostrar detectados (+ reagendados)</option>
+            <option value="saved_only">📌 Consultar SOLO pedidos editados / reagendados</option>
             <option value="all">📄 Mostrar TODOS los pedidos del Excel</option>
           </select>
           <input type="text" id="searchInput" placeholder="🔍 Buscar Nº Pedido, Proveedor, Observación..." style="width: 280px;" />
         </div>
         <div class="toolbar-right">
-          <button type="button" class="btn btn-blue" id="btnSaveAllVisible" disabled title="Guarda todos los cambios hechos en la tabla para futuras consultas">
-            💾 Guardar todos los editados
+          <button type="button" class="btn btn-blue" id="btnSaveAllVisible" disabled title="Guarda todos los cambios hechos en la tabla en la nube para todo el equipo">
+            ☁️ Guardar todos los editados
           </button>
           <button type="button" class="btn btn-outline" id="btnCopyOrders" disabled>
             📋 Copiar Nº Pedidos
@@ -897,15 +923,38 @@
     const STORAGE_OLD_KEY         = "klys_pedidos_annotations_v1";
     const STORAGE_LAST_TABLE_KEY  = "klys_pedidos_last_table_v2";
 
+    // Configuración Firebase Cloud Firestore compartida
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyC52UTRjKFmhplEfSLY24anlQ0FtMMxmWU",
+      authDomain: "almacen-logistica-sestao.firebaseapp.com",
+      projectId: "almacen-logistica-sestao",
+      storageBucket: "almacen-logistica-sestao.firebasestorage.app",
+      messagingSenderId: "945438499628",
+      appId: "1:945438499628:web:016b85ef2e81e643984289"
+    };
+
+    const CLOUD_COLLECTION = "movimientos";
+    const CLOUD_DOC_ANNOTATIONS = "klys_recepcion_annotations_shared";
+    const CLOUD_DOC_EXCEL       = "klys_recepcion_excel_shared";
+
     // Estado global
     let allRows = [];
     let filteredRows = [];
     let currentSort = { key: null, asc: true };
     let currentFileName = "pedidos_recepcion";
-    let annotationsMap = loadAnnotations();
+    let annotationsMap = loadAnnotationsLocal();
+    let cloudDb = null;
+    let cloudFns = null;
+    let obsDebounceTimer = null;
 
-    // Cargar diccionario de pedidos editados/reagendados (migra v1 si existía)
-    function loadAnnotations() {
+    function setCloudStatus(state, text) {
+      const el = document.getElementById("cloudStatus");
+      if (!el) return;
+      el.className = `cloud-badge ${state}`;
+      el.textContent = text;
+    }
+
+    function loadAnnotationsLocal() {
       try {
         const rawV2 = localStorage.getItem(STORAGE_ANNOTATIONS_KEY);
         const mapV2 = rawV2 ? JSON.parse(rawV2) : {};
@@ -922,7 +971,7 @@
       }
     }
 
-    function saveAnnotations() {
+    function saveAnnotationsLocal() {
       try {
         localStorage.setItem(STORAGE_ANNOTATIONS_KEY, JSON.stringify(annotationsMap));
         updateMemoryStatusText();
@@ -931,22 +980,59 @@
       }
     }
 
-    // Guardar la última tabla de Excel cargada para que al abrir/refrescar la página no salga vacía
-    function saveLastTableSession(rows, fileName, sheetName) {
+    // Subir diccionario de pedidos editados/reagendados a la nube para todos los usuarios
+    async function pushAnnotationsToCloud() {
+      saveAnnotationsLocal();
+      if (!cloudDb || !cloudFns) return;
       try {
-        const payload = {
-          fileName: fileName || "pedidos_recepcion",
-          sheetName: sheetName || "Export",
-          savedAt: new Date().toLocaleString("es-ES"),
-          rows: rows
-        };
-        localStorage.setItem(STORAGE_LAST_TABLE_KEY, JSON.stringify(payload));
-      } catch (e) {
-        console.warn("Tabla demasiado grande para caché completa, se mantienen los editados:", e);
+        setCloudStatus("syncing", "☁️ Guardando en nube...");
+        const { doc, setDoc } = cloudFns;
+        await setDoc(doc(cloudDb, CLOUD_COLLECTION, CLOUD_DOC_ANNOTATIONS), {
+          annotationsJson: JSON.stringify(annotationsMap),
+          klysUpdatedAt: new Date().toISOString()
+        });
+        setCloudStatus("online", "☁️ Nube sincronizada (Compartido)");
+      } catch (err) {
+        console.error("Error subiendo editados a la nube:", err);
+        setCloudStatus("syncing", "⚠️ Guardado local (Reintentando nube)");
       }
     }
 
-    function loadLastTableSession() {
+    // Guardar la última tabla de Excel en local + en la nube para que cualquiera que abra la web la vea directamente
+    async function saveLastTableSession(rows, fileName, sheetName, pushCloud = true) {
+      const savedAt = new Date().toLocaleString("es-ES");
+      const payload = {
+        fileName: fileName || "pedidos_recepcion",
+        sheetName: sheetName || "Export",
+        savedAt: savedAt,
+        rows: rows
+      };
+      try {
+        localStorage.setItem(STORAGE_LAST_TABLE_KEY, JSON.stringify(payload));
+      } catch (e) {
+        console.warn("Tabla grande para localStorage:", e);
+      }
+
+      if (pushCloud && cloudDb && cloudFns) {
+        try {
+          setCloudStatus("syncing", "☁️ Compartiendo Excel en la nube...");
+          const { doc, setDoc } = cloudFns;
+          await setDoc(doc(cloudDb, CLOUD_COLLECTION, CLOUD_DOC_EXCEL), {
+            fileName: payload.fileName,
+            sheetName: payload.sheetName,
+            savedAt: payload.savedAt,
+            rowsJson: JSON.stringify(rows),
+            klysUpdatedAt: new Date().toISOString()
+          });
+          setCloudStatus("online", "☁️ Nube sincronizada (Compartido)");
+        } catch (err) {
+          console.warn("No se pudo subir la tabla completa a la nube, los editados sí se sincronizan:", err);
+          setCloudStatus("online", "☁️ Editados sincronizados en nube");
+        }
+      }
+    }
+
+    function loadLastTableLocal() {
       try {
         const raw = localStorage.getItem(STORAGE_LAST_TABLE_KEY);
         if (!raw) return null;
@@ -956,13 +1042,114 @@
       }
     }
 
+    // Conectar con Firebase Cloud Firestore en tiempo real
+    async function initCloudSync() {
+      try {
+        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js");
+        const { getFirestore, doc, getDoc, setDoc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js");
+
+        const app = initializeApp(FIREBASE_CONFIG, "KlysRecepcionSharedApp");
+        cloudDb = getFirestore(app);
+        cloudFns = { doc, getDoc, setDoc, onSnapshot };
+
+        // 1. Escuchar en tiempo real los pedidos reagendados y observaciones de todo el equipo
+        onSnapshot(
+          doc(cloudDb, CLOUD_COLLECTION, CLOUD_DOC_ANNOTATIONS),
+          (snap) => {
+            if (snap.exists()) {
+              const data = snap.data();
+              if (data && data.annotationsJson) {
+                try {
+                  const remoteMap = JSON.parse(data.annotationsJson);
+                  // Combinar con cualquier dato local que aún no estuviera en la nube
+                  const localCountBefore = Object.keys(annotationsMap).length;
+                  const remoteCount = Object.keys(remoteMap).length;
+                  annotationsMap = { ...annotationsMap, ...remoteMap };
+                  // Si un pedido fue borrado explícitamente en remoto (reagendado="" y obs=""), limpiar
+                  Object.keys(annotationsMap).forEach(k => {
+                    if (remoteMap[k] === undefined && localCountBefore <= remoteCount) {
+                      delete annotationsMap[k];
+                    } else if (annotationsMap[k] && !annotationsMap[k].reagendado && !(annotationsMap[k].obs || "").trim()) {
+                      delete annotationsMap[k];
+                    }
+                  });
+                  saveAnnotationsLocal();
+
+                  // No re-renderizar toda la tabla si el usuario está escribiendo ahora mismo dentro de una caja de observación
+                  const activeEl = document.activeElement;
+                  const isTypingObs = activeEl && activeEl.classList && activeEl.classList.contains("obs-input");
+                  if (!isTypingObs) {
+                    applyFiltersAndRender();
+                  } else {
+                    updateKpiCountersOnly();
+                  }
+                } catch (e) {
+                  console.error("Error leyendo anotaciones de la nube:", e);
+                }
+              }
+            } else if (Object.keys(annotationsMap).length > 0) {
+              // Si la nube aún está vacía pero este navegador ya tenía pedidos editados, subirlos
+              pushAnnotationsToCloud();
+            }
+            setCloudStatus("online", "☁️ Nube sincronizada (Compartido)");
+          },
+          (err) => {
+            console.error("Error en suscripción nube:", err);
+            setCloudStatus("syncing", "⚠️ Modo local (Sin conexión a nube)");
+          }
+        );
+
+        // 2. Escuchar en tiempo real el último Excel subido por cualquier persona
+        onSnapshot(
+          doc(cloudDb, CLOUD_COLLECTION, CLOUD_DOC_EXCEL),
+          (snap) => {
+            if (snap.exists()) {
+              const data = snap.data();
+              if (data && data.rowsJson) {
+                try {
+                  const remoteRows = JSON.parse(data.rowsJson);
+                  if (Array.isArray(remoteRows) && remoteRows.length > 0) {
+                    allRows = remoteRows;
+                    currentFileName = data.fileName || "pedidos_recepcion";
+                    document.getElementById("fileStatus").textContent =
+                      `☁️ Excel compartido: ${currentFileName} (${allRows.length} pedidos · actualizado ${data.savedAt || ""})`;
+                    document.getElementById("kpiSheetName").textContent = `Hoja: ${data.sheetName || "Export"}`;
+                    document.getElementById("dropzone").classList.add("compact");
+                    populateSecDropdown(allRows);
+                    saveLastTableSession(allRows, currentFileName, data.sheetName, false);
+
+                    const activeEl = document.activeElement;
+                    const isTypingObs = activeEl && activeEl.classList && activeEl.classList.contains("obs-input");
+                    if (!isTypingObs) {
+                      applyFiltersAndRender();
+                    }
+                  }
+                } catch (e) {
+                  console.error("Error parseando Excel compartido:", e);
+                }
+              }
+            } else if (allRows.length > 0) {
+              // Subir la tabla local actual si la nube aún no tenía ninguna
+              saveLastTableSession(allRows, currentFileName, "Export", true);
+            }
+          }
+        );
+      } catch (e) {
+        console.error("No se pudo inicializar Firebase:", e);
+        setCloudStatus("syncing", "⚠️ Modo local");
+      }
+    }
+
     function updateMemoryStatusText() {
-      const count = Object.keys(annotationsMap).length;
+      const count = Object.keys(annotationsMap).filter(k => {
+        const a = annotationsMap[k];
+        return a && (a.reagendado || (a.obs && a.obs.trim()));
+      }).length;
       const el = document.getElementById("savedMemoryInfo");
       if (el) {
         el.innerHTML = count > 0
-          ? `✅ <strong>${count} pedido(s) editado(s)</strong> guardados en memoria para futuras consultas`
-          : `Memoria: 0 pedidos editados guardados`;
+          ? `☁️ <strong>${count} pedido(s) editado(s)</strong> guardados y compartidos con todo el equipo`
+          : `Nube compartida: 0 pedidos editados guardados`;
       }
     }
 
@@ -994,8 +1181,8 @@
       return "";
     }
 
-    // Guardar un pedido editado (incluyendo copia completa de sus datos para futuras consultas)
-    function persistOrderEdit(pedido, newReagendadoIso, newObsText, showNotification = true) {
+    // Guardar un pedido editado en local + en la nube compartida
+    function persistOrderEdit(pedido, newReagendadoIso, newObsText, showNotification = true, syncCloudNow = true) {
       if (!pedido) return;
       const existing = annotationsMap[pedido] || { reagendado: "", obs: "", snapshot: null, updatedAt: "" };
       const rowInTable = findRowByPedido(pedido);
@@ -1005,12 +1192,15 @@
 
       if (!reagendadoVal && !obsVal.trim()) {
         delete annotationsMap[pedido];
-        saveAnnotations();
+        if (syncCloudNow) {
+          pushAnnotationsToCloud();
+        } else {
+          saveAnnotationsLocal();
+        }
         if (showNotification) showToast(`🗑️ Datos editados eliminados del pedido ${pedido}`);
         return;
       }
 
-      // Guardamos también la foto completa del pedido (snapshot) para que nunca se pierda aunque el próximo Excel no lo traiga o cambie sus fechas
       const snapshot = rowInTable ? {
         almacen: rowInTable.almacen || "",
         sec: rowInTable.sec || "",
@@ -1049,10 +1239,15 @@
         snapshot: snapshot
       };
 
-      saveAnnotations();
+      if (syncCloudNow) {
+        pushAnnotationsToCloud();
+      } else {
+        saveAnnotationsLocal();
+      }
+
       if (showNotification) {
         const infoDate = reagendadoVal ? ` (Nueva cita: ${formatIsoToDisplay(reagendadoVal)})` : "";
-        showToast(`💾 Pedido ${pedido} guardado para futuras consultas${infoDate}`);
+        showToast(`☁️ Pedido ${pedido} guardado y compartido${infoDate}`);
       }
     }
 
@@ -1060,14 +1255,14 @@
     window.onReagendadoChange = function(pedido, isoDateVal) {
       const obsInput = document.getElementById(`obs_${pedido}`);
       const currentObs = obsInput ? obsInput.value : undefined;
-      persistOrderEdit(pedido, isoDateVal || "", currentObs, true);
+      persistOrderEdit(pedido, isoDateVal || "", currentObs, true, true);
       applyFiltersAndRender();
     };
 
     window.onObsInput = function(pedido, textVal, inputEl) {
       const dateInput = document.getElementById(`reag_${pedido}`);
       const currentReag = dateInput ? dateInput.value : undefined;
-      persistOrderEdit(pedido, currentReag, textVal || "", false);
+      persistOrderEdit(pedido, currentReag, textVal || "", false, false);
       if (inputEl) {
         inputEl.classList.toggle("has-obs", Boolean(textVal && textVal.trim()));
       }
@@ -1077,14 +1272,25 @@
         btn.classList.remove("saved");
       }
       updateKpiCountersOnly();
+
+      // Sincronizar automáticamente en la nube 900ms después de terminar de escribir
+      if (obsDebounceTimer) clearTimeout(obsDebounceTimer);
+      obsDebounceTimer = setTimeout(() => {
+        pushAnnotationsToCloud();
+        if (btn) {
+          btn.textContent = "✅ Guardado";
+          btn.classList.add("saved");
+        }
+      }, 900);
     };
 
     window.onExplicitSaveRow = function(pedido) {
+      if (obsDebounceTimer) clearTimeout(obsDebounceTimer);
       const dateInput = document.getElementById(`reag_${pedido}`);
       const obsInput = document.getElementById(`obs_${pedido}`);
       const reagVal = dateInput ? dateInput.value : "";
       const obsVal = obsInput ? obsInput.value : "";
-      persistOrderEdit(pedido, reagVal, obsVal, true);
+      persistOrderEdit(pedido, reagVal, obsVal, true, true);
       applyFiltersAndRender();
     };
 
@@ -1100,7 +1306,6 @@
       applyFiltersAndRender();
     };
 
-    // Utilidad para mostrar avisos rápidos
     function showToast(msg) {
       const t = document.getElementById("toast");
       t.textContent = msg;
@@ -1108,7 +1313,6 @@
       setTimeout(() => t.classList.remove("show"), 2800);
     }
 
-    // Normalizar texto de cabecera
     function normHeader(str) {
       return String(str || "")
         .trim()
@@ -1118,7 +1322,6 @@
         .replace(/\s+/g, " ");
     }
 
-    // Parsear cualquier fecha del Excel (DD/MM/YYYY, número serie Excel, YYYY-MM-DD o Date)
     function parseExcelDate(val) {
       if (val === null || val === undefined || val === "") return null;
 
@@ -1252,10 +1455,10 @@
       const idxRecepcion     = findCol(["1ª recepcion", "1a recepcion", "recepcion"], 16);
       const idxValoracion    = findCol(["fecha valoracion", "valoracion"], 17);
 
-      // Si el usuario sube un Excel previamente exportado desde esta herramienta, recuperar automáticamente sus columnas de Reagendado y Observaciones
       const idxReagendadoImport = findCol(["fecha reagendado", "reagendado"], -1);
       const idxObsImport        = findCol(["observaciones", "observacion"], -1);
 
+      let hasNewImports = false;
       const parsed = [];
       for (let r = headerRowIndex + 1; r < matrix.length; r++) {
         const row = matrix[r];
@@ -1303,7 +1506,6 @@
           valoracion: valoracionObj ? valoracionObj.display : (row[idxValoracion] !== undefined ? String(row[idxValoracion]).trim() : "")
         };
 
-        // Si el Excel subido traía Fecha Reagendado u Observaciones, guardarlas también en memoria
         const importedReag = idxReagendadoImport >= 0 ? displayToIso(row[idxReagendadoImport]) : "";
         const importedObs  = idxObsImport >= 0 ? String(row[idxObsImport] || "").trim() : "";
         if (pedidoVal && (importedReag || importedObs)) {
@@ -1314,20 +1516,25 @@
             updatedAt: existing.updatedAt || new Date().toLocaleString("es-ES", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }),
             snapshot: rowObj
           };
+          hasNewImports = true;
         } else if (pedidoVal && annotationsMap[pedidoVal]) {
-          // Actualizar snapshot con los datos más recientes manteniendo la fecha planificada original si era del 10/11 o 11/11
           const prevSnap = annotationsMap[pedidoVal].snapshot || {};
           annotationsMap[pedidoVal].snapshot = {
             ...rowObj,
             planificadaOriginal: prevSnap.planificadaOriginal || prevSnap.planificada || rowObj.planificada,
             isPlan1011: Boolean(rowObj.isPlan1011 || prevSnap.isPlan1011)
           };
+          hasNewImports = true;
         }
 
         parsed.push(rowObj);
       }
 
-      saveAnnotations();
+      if (hasNewImports) {
+        pushAnnotationsToCloud();
+      } else {
+        saveAnnotationsLocal();
+      }
       document.getElementById("kpiSheetName").textContent = `Hoja: ${sheetName || "Export"}`;
       populateSecDropdown(parsed);
       return parsed;
@@ -1347,7 +1554,6 @@
       if (secs.includes(currentVal)) sel.value = currentVal;
     }
 
-    // Construir lista combinada: filas del Excel actual + pedidos editados guardados que ya no estén en el Excel
     function buildCombinedRows() {
       const inExcelSet = new Set(allRows.map(r => r.pedido));
       const combined = [...allRows];
@@ -1423,7 +1629,6 @@
       updateMemoryStatusText();
     }
 
-    // Aplicar las reglas y actualizar tabla y KPIs
     function applyFiltersAndRender() {
       const cutoffInt = getCutoffInt();
       const cutoffStr = formatCutoffDisplay();
@@ -1477,7 +1682,6 @@
 
       updateKpiCountersOnly();
 
-      // Filtrar para la vista de la tabla
       filteredRows = evaluated.filter(r => {
         if (viewMode === "saved_only" && !r.hasEdit) return false;
         if (viewMode === "matched" && !r.isMatched) return false;
@@ -1498,7 +1702,6 @@
         return true;
       });
 
-      // Ordenación
       if (currentSort.key) {
         const k = currentSort.key;
         const dir = currentSort.asc ? 1 : -1;
@@ -1550,7 +1753,7 @@
           <tr>
             <td colspan="19" class="empty-state">
               No se han encontrado pedidos con el filtro actual.
-              <br/><span style="font-size:0.8rem;">Puedes cambiar el selector superior a "📌 Consultar SOLO mis pedidos editados / reagendados" o "📄 Mostrar TODOS".</span>
+              <br/><span style="font-size:0.8rem;">Puedes cambiar el selector superior a "📌 Consultar SOLO pedidos editados / reagendados" o "📄 Mostrar TODOS".</span>
             </td>
           </tr>`;
         return;
@@ -1560,7 +1763,6 @@
         const prevClass = r.previstoObj && r.previstoObj.int > cutoffInt ? "date-late" : "";
         const solClass  = r.solicitadaObj && r.solicitadaObj.int < cutoffInt ? "date-early" : "";
 
-        // Si la Fecha Planificada es 10/11 o 11/11 -> marcar en ROJO
         let planHtml = "";
         const changedPlanInfo = (r.planificadaOriginal && r.planificadaOriginal !== r.planificada)
           ? ` <span class="origin-tag" title="Fecha planificada que tenía antes de reagendar">Orig: ${r.planificadaOriginal}</span>`
@@ -1594,8 +1796,8 @@
         const safePedido = escapeHtml(r.pedido);
         const safeObs = escapeHtml(r.observaciones);
         const memoryBadge = r.fromMemoryOnly
-          ? `<span class="origin-tag" title="Guardado de un Excel anterior">📌 Guardado</span>`
-          : (!r.matchesRule && r.hasEdit ? `<span class="origin-tag" title="Mantenido en lista por estar reagendado/editado">📌 Editado</span>` : "");
+          ? `<span class="origin-tag" title="Guardado en la nube de un Excel anterior">☁️ Guardado</span>`
+          : (!r.matchesRule && r.hasEdit ? `<span class="origin-tag" title="Mantenido en lista por estar reagendado/editado">☁️ Editado</span>` : "");
 
         return `
           <tr class="${rowClasses}">
@@ -1639,12 +1841,12 @@
                   id="btnsave_${safePedido}"
                   class="btn-save-row ${r.hasEdit ? "saved" : ""}"
                   onclick="onExplicitSaveRow('${safePedido}')"
-                  title="${r.updatedAt ? "Guardado el " + r.updatedAt : "Guardar cita y observación para futuras consultas"}"
+                  title="${r.updatedAt ? "Guardado en la nube el " + r.updatedAt : "Guardar cita y observación en la nube para todo el equipo"}"
                 >
                   ${r.hasEdit ? "✅ Guardado" : "💾 Guardar"}
                 </button>
                 ${r.hasEdit
-                  ? `<button type="button" class="btn-clear-mini" onclick="persistOrderEdit('${safePedido}', '', '', true); applyFiltersAndRender();" title="Borrar reagendado y observación de este pedido">✕</button>`
+                  ? `<button type="button" class="btn-clear-mini" onclick="persistOrderEdit('${safePedido}', '', '', true, true); applyFiltersAndRender();" title="Borrar reagendado y observación de este pedido">✕</button>`
                   : ""}
               </div>
             </td>
@@ -1661,7 +1863,6 @@
       }).join("");
     }
 
-    // Guardar explícitamente todas las filas visibles que tengan algún dato escrito en los inputs
     function saveAllVisibleEdits() {
       let count = 0;
       filteredRows.forEach(r => {
@@ -1670,19 +1871,19 @@
         const dVal = dEl ? dEl.value : r.reagendado;
         const oVal = oEl ? oEl.value : r.observaciones;
         if (dVal || (oVal && oVal.trim())) {
-          persistOrderEdit(r.pedido, dVal, oVal, false);
+          persistOrderEdit(r.pedido, dVal, oVal, false, false);
           count++;
         }
       });
+      pushAnnotationsToCloud();
       applyFiltersAndRender();
-      showToast(`✅ ${count} pedido(s) reagendado(s)/editado(s) guardados en memoria`);
+      showToast(`☁️ ${count} pedido(s) guardados y compartidos en la nube`);
     }
 
-    // Exportar e importar historial JSON por si cambia de ordenador
     function exportAnnotationsBackup() {
       const count = Object.keys(annotationsMap).length;
       if (count === 0) {
-        alert("Todavía no tienes ningún pedido reagendado o con observaciones guardado.");
+        alert("Todavía no hay ningún pedido reagendado o con observaciones guardado.");
         return;
       }
       const blob = new Blob([JSON.stringify(annotationsMap, null, 2)], { type: "application/json" });
@@ -1703,9 +1904,9 @@
           const imported = JSON.parse(e.target.result);
           if (typeof imported === "object" && imported !== null) {
             annotationsMap = { ...annotationsMap, ...imported };
-            saveAnnotations();
+            pushAnnotationsToCloud();
             applyFiltersAndRender();
-            showToast(`✅ Historial importado correctamente (${Object.keys(annotationsMap).length} pedidos en memoria)`);
+            showToast(`☁️ Historial importado y compartido en la nube (${Object.keys(annotationsMap).length} pedidos)`);
           }
         } catch (err) {
           alert("El archivo seleccionado no es un historial válido (.json).");
@@ -1714,7 +1915,6 @@
       reader.readAsText(file);
     }
 
-    // Leer el archivo subido con SheetJS
     function handleFile(file) {
       if (!file) return;
       currentFileName = file.name.replace(/\.[^/.]+$/, "");
@@ -1731,12 +1931,12 @@
 
           allRows = parseSheetMatrix(matrix, targetSheet);
           const nowStr = new Date().toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
-          document.getElementById("fileStatus").textContent = `✅ ${file.name} (${allRows.length} pedidos · cargado a las ${nowStr})`;
+          document.getElementById("fileStatus").textContent = `✅ ${file.name} (${allRows.length} pedidos · subido a las ${nowStr})`;
           document.getElementById("dropzone").classList.add("compact");
 
-          saveLastTableSession(allRows, currentFileName, targetSheet);
+          saveLastTableSession(allRows, currentFileName, targetSheet, true);
           applyFiltersAndRender();
-          showToast(`Archivo cargado: ${allRows.length} pedidos (${Object.keys(annotationsMap).length} editados conservados)`);
+          showToast(`☁️ Excel compartido en la nube (${allRows.length} pedidos)`);
         } catch (err) {
           console.error(err);
           alert("Error al leer el archivo Excel. Asegúrate de que sea un archivo .xlsx, .xls o .csv válido.");
@@ -1746,7 +1946,6 @@
       reader.readAsArrayBuffer(file);
     }
 
-    // Exportar los resultados actuales a un nuevo Excel incluyendo Fecha Reagendado y Observaciones
     function exportFilteredToExcel() {
       if (!filteredRows.length) return;
       const exportData = filteredRows.map(r => ({
@@ -1804,9 +2003,9 @@
       allRows = parseSheetMatrix(sampleMatrix, "Export (Ejemplo)");
       document.getElementById("fileStatus").textContent = `🧪 Datos de ejemplo cargados (${allRows.length} pedidos)`;
       document.getElementById("dropzone").classList.add("compact");
-      saveLastTableSession(allRows, currentFileName, "Export (Ejemplo)");
+      saveLastTableSession(allRows, currentFileName, "Export (Ejemplo)", true);
       applyFiltersAndRender();
-      showToast("Datos de ejemplo cargados (incluye pedidos del 10/11 y 11/11 en rojo)");
+      showToast("Datos de ejemplo cargados y sincronizados");
     }
 
     // Eventos UI
@@ -1860,7 +2059,6 @@
       if (e.target.files && e.target.files[0]) importAnnotationsBackup(e.target.files[0]);
     });
 
-    // Ordenación por columnas al hacer clic en la cabecera
     document.querySelectorAll("#ordersTable thead th[data-sort]").forEach(th => {
       th.addEventListener("click", () => {
         const key = th.getAttribute("data-sort");
@@ -1874,20 +2072,21 @@
       });
     });
 
-    // Al abrir la página, restaurar automáticamente el último Excel cargado y todos los pedidos editados
+    // Inicializar datos locales al instante y conectar con la nube compartida en tiempo real
     (function initOnLoad() {
       updateMemoryStatusText();
-      const lastSession = loadLastTableSession();
+      const lastSession = loadLastTableLocal();
       if (lastSession && Array.isArray(lastSession.rows) && lastSession.rows.length > 0) {
         allRows = lastSession.rows;
         currentFileName = lastSession.fileName || "pedidos_recepcion";
         document.getElementById("fileStatus").textContent =
-          `🔄 Restaurado último Excel: ${currentFileName} (${allRows.length} pedidos · ${lastSession.savedAt})`;
+          `🔄 Último Excel: ${currentFileName} (${allRows.length} pedidos · ${lastSession.savedAt})`;
         document.getElementById("kpiSheetName").textContent = `Hoja: ${lastSession.sheetName || "Export"}`;
         document.getElementById("dropzone").classList.add("compact");
         populateSecDropdown(allRows);
       }
       applyFiltersAndRender();
+      initCloudSync();
     })();
   </script>
 </body>
